@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">tutoralNavi3</string>
+    <string name="togle_open">Open</string>
+    <string name="togle_close">Close</string>
+
+    <string name="loading">loading</string>
+    <string name="signed_out">signed_out</string>
+    <string name="signed_in_fmt">LoginTest</string>
+    <string name="server_client_id">188830952888-nu6j81cn1aonaioc120aadglr444cgjh.apps.googleusercontent.com</string>
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navi_menu"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navi_home"
+        android:icon="@drawable/ic_settings_applications_black"
+        android:title="Home"/>
+
+    <item
+        android:id="@+id/navi_account"
+        android:icon="@drawable/ic_person_pin_black"
+        android:title="My Account"
+        ></item>
+
+    <item
+        android:id="@+id/navi_webview"
+        android:icon="@drawable/ic_person_pin_black"
+        android:title="Web View"
+        ></item>
+
+    <item
+        android:id="@+id/navi_googleSign"
+        android:icon="@drawable/ic_sign_in"
+        android:title="GoogleSign"
+        ></item>
+    <item
+        android:id="@+id/navi_googleSignOut"
+        android:icon="@drawable/ic_sign_out"
+        android:title="GoogleSignOut"
+        ></item>
+    <item
+        android:id="@+id/navi_firebasesavedata"
+        android:icon="@drawable/ic_sign_out"
+        android:title="FireBaseSendData"
+        ></item>
+</menu>
