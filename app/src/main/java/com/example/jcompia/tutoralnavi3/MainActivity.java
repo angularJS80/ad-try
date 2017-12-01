@@ -1,12 +1,9 @@
 package com.example.jcompia.tutoralnavi3;
 
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -32,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
 
-    private Context mContext;
+    public static Context mContext;
     private ProgressDialog mProgressDialog;
     public static GoogleSignInAccount acct;
     private GoogleApiClient mGoogleApiClient;
@@ -50,16 +47,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mContext = MainActivity.this;
+        mContext = this;
         menuSetting(); // 메뉴바 세팅
-        GoogleSignStart();
+
+        GoogleApplication.getInstance().initialize(this);
+
+        //GoogleConnection(); // 같은 컨넥션인데 왜 구글 사인화면에서 계속 로딩바가 돌지????? 컨넥션을 수동으로 해줘야?
+        mGoogleApiClient = GoogleApplication.getInstance().GoogleConnection();
+        mGoogleApiClient.connect(); // 컨넥션을 수동으로 해줘야??
+        GoogleApplication.getInstance().setGoogleApiClient(mGoogleApiClient );
+        GoogleApplication.getInstance().onStart();
+
+        // 어플리케이션에서 서비스 동작하기위해 시도중....
+        // 어플리케이션을 활용하여 구글 컨넥션 케쉬값으로 자동로그인처리까지 해봄..
+
+
         //startService(new Intent(getApplicationContext(), GoogleService.class));
-        Intent intent = new Intent(this, GoogleService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        //Intent intent = new Intent(this, GoogleService.class);
+        //bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
       // ((GoogleService)GoogleService.mContext).getGoogleApiClient();
     }
 
-    private ServiceConnection mConnection = new ServiceConnection() {
+    /*private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             GoogleService.LocalBinder binder = (GoogleService.LocalBinder) service;
@@ -75,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceDisconnected(ComponentName name) {
             mBound = false;
         }
-    };
+    };*/
 
     private void menuSetting(){
         toolbar = (Toolbar) findViewById(R.id.navi_actionbar); // supeertActionBar 에 주입하기 위해서
@@ -103,8 +112,9 @@ public class MainActivity extends AppCompatActivity {
                         //((GoogleSignActivity)GoogleSignActivity.mContext).signIn();
                         return true;
                     case R.id.navi_googleSignOut:
-                        signOut();
-                        //startActivity(new Intent(getApplicationContext(), GoogleSignActivity.class));
+                        //signOut();
+                        GoogleApplication.getInstance().signOut();
+                        startActivity(new Intent(getApplicationContext(), GoogleSignActivity.class));
                         return true;
 
                     case R.id.navi_firebasesavedata:
@@ -114,6 +124,8 @@ public class MainActivity extends AppCompatActivity {
                             fireBaseTester.setMsg("onMenu FireBase Clicked!");
                             fireBaseTester .firebaseAuthWithGoogle(googleService.getGoogleSignAccount());
                         }
+                    case R.id.navi_todoList: startActivity(new Intent(getApplicationContext(), TodoActivity.class));
+                        return true;
 
                 }
 
@@ -173,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void GoogleSignStart(){
+    public void GoogleConnection(){
         // [START configure_signin]
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -210,8 +222,9 @@ public class MainActivity extends AppCompatActivity {
         // signInButton.setSize(SignInButton.SIZE_STANDARD);
         // signInButton.setScopes(gso.getScopeArray());
         // [END customize_button]
-
-        signInCheck(mGoogleApiClient);
+        //GoogleApplication.getInstance().setGoogleApiClient(mGoogleApiClient);
+        //GoogleApplication.getInstance().onStart();
+        //signInCheck(mGoogleApiClient);
     }
 
     public void signInCheck(GoogleApiClient mGoogleApiClient) {
@@ -224,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(mContext, "Got cached sign-in",     Toast.LENGTH_SHORT).show();
 
             GoogleSignInResult result = opr.get();
-            //handleSignInResult(result);
+            handleSignInResult(result);
         } else {
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
@@ -234,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
                     hideProgressDialog();
-                    //handleSignInResult(googleSignInResult);
+                    handleSignInResult(googleSignInResult);
                 }
             });
         }
@@ -244,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(mContext, "handleSignInResult:" + result.isSuccess(),     Toast.LENGTH_SHORT).show();
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
+            acct = result.getSignInAccount();
             Toast.makeText(mContext, "handleSignInResult getEmail:" + acct.getEmail()+"getAccount:" + acct.getAccount()+"getIdToken:" + acct.getIdToken(),     Toast.LENGTH_SHORT).show();
 
             // mStatusTextView.setText(acct.getDisplayName());
@@ -255,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showProgressDialog() {
+    public void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getString(R.string.loading));
@@ -264,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.show();
     }
 
-    private void hideProgressDialog() {
+    public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.hide();
         }
@@ -284,6 +297,9 @@ public class MainActivity extends AppCompatActivity {
 
     public GoogleApiClient getGoogleApiClient(){
         return this.mGoogleApiClient;
+    }
+    public GoogleSignInAccount getGoogleSignInAccount(){
+        return this.acct;
     }
 
 }

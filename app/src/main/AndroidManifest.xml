@@ -28,6 +28,7 @@
             android:enabled="true"
             android:exported="true" />
 
+        <activity android:name=".TodoActivity"></activity>
     </application>
 
 </manifest>

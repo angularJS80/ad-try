@@ -41,6 +41,9 @@ public class GoogleSignActivity extends MainActivity  implements
         super.onCreate(savedInstanceState);
         setViewResource();
         mGoogleApiClient = super.getGoogleApiClient();
+        //mGoogleApiClient.connect();
+        Toast.makeText(GoogleSignActivity.this, "isConnected" +mGoogleApiClient.isConnected(),     Toast.LENGTH_SHORT).show();
+
         //googleConnection();
 
     }
@@ -172,7 +175,7 @@ public class GoogleSignActivity extends MainActivity  implements
     }
 
 
-    private void showProgressDialog() {
+    public void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getString(R.string.loading));
@@ -182,7 +185,7 @@ public class GoogleSignActivity extends MainActivity  implements
         mProgressDialog.show();
     }
 
-    private void hideProgressDialog() {
+    public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.hide();
         }
@@ -207,6 +210,7 @@ public class GoogleSignActivity extends MainActivity  implements
                 signIn();
                 break;
             case R.id.sign_out_button:
+                //GoogleApplication.getInstance().signOut();
                 signOut();
                 break;
             case R.id.disconnect_button:

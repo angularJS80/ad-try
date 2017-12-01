@@ -35,4 +35,9 @@
         android:icon="@drawable/ic_sign_out"
         android:title="FireBaseSendData"
         ></item>
+    <item
+        android:id="@+id/navi_todoList"
+        android:icon="@drawable/ic_person_pin_black"
+        android:title="Todo - List"
+        ></item>
 </menu>
