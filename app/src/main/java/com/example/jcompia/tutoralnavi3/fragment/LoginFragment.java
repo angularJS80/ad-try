@@ -123,13 +123,8 @@ public class LoginFragment extends Fragment {
                             @Override
                             public void onNext(Map map) {
                                 Log.e("GithubDemo", map.toString());
-
-                                //headers = { Authorization: `Bearer ${access_token}` };
-                                Token token = new Token(parameters.get("username"),map.toString());
-
                                 //계정이 이미 있다고 해서.. 한번 넣고 끝인가.
                                 //accountManager.addAccountExplicitly(account, null, null);
-
                                 accountManager.setAuthToken(finalAccount,"full_access",map.toString());
                             }
 
