@@ -15,7 +15,7 @@ public interface GithubService {
     String SERVICE_ENDPOINT = "http://211.249.60.229:58080/hero/";
 
     @POST("api/authenticate")
-    Observable<Map> authenticateUser(@Body Github param);
+    Observable<Map> authenticateUser(@Body Map param);
 
     @POST("hero/getList")
     Observable<Github> getHeroList();

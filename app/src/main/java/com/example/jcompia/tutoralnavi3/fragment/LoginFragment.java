@@ -97,10 +97,10 @@ public class LoginFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Map<String,String> parameters = new HashMap<>();
-                parameters.put("userId",idText.getText().toString());
-                parameters.put("userPassword",passwordText.getText().toString());
-                Github github = new Github();
-                service.authenticateUser(github) // 서비스의 결과는 옵저버를을 반환 함으로 이후의 처리는 옵저버블형태이다.
+                parameters.put("username",idText.getText().toString());
+                parameters.put("password",passwordText.getText().toString());
+                //Github github = new Github();
+                service.authenticateUser(parameters) // 서비스의 결과는 옵저버를을 반환 함으로 이후의 처리는 옵저버블형태이다.
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Observer<Map>() {
@@ -109,7 +109,8 @@ public class LoginFragment extends Fragment {
 
                             @Override
                             public void onNext(Map map) {
-                                //mCardAdapter.addData(github);
+                                Log.e("GithubDemo", map.toString());
+                                //headers = { Authorization: `Bearer ${access_token}` };
                             }
 
                             @Override
