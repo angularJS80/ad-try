@@ -28,7 +28,8 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".TodoActivity"></activity>
+        <activity android:name=".TodoActivity" />
+        <activity android:name=".FragmentActivity"></activity>
     </application>
 
 </manifest>

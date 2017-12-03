@@ -40,4 +40,9 @@
         android:icon="@drawable/ic_person_pin_black"
         android:title="Todo - List"
         ></item>
+    <item
+        android:id="@+id/navi_fragment"
+        android:icon="@drawable/ic_person_pin_black"
+        android:title="FregmentLayout"
+        ></item>
 </menu>

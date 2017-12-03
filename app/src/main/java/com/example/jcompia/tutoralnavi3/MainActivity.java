@@ -126,6 +126,10 @@ public class MainActivity extends AppCompatActivity {
                         }
                     case R.id.navi_todoList: startActivity(new Intent(getApplicationContext(), TodoActivity.class));
                         return true;
+                    case R.id.navi_fragment: startActivity(new Intent(getApplicationContext(), FragmentActivity.class));
+                        return true;
+
+
 
                 }
 
