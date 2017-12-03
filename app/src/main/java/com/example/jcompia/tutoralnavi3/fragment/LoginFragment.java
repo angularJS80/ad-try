@@ -1,5 +1,8 @@
 package com.example.jcompia.tutoralnavi3.fragment;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jcompia.tutoralnavi3.MainActivity;
 import com.example.jcompia.tutoralnavi3.R;
 import com.example.jcompia.tutoralnavi3.rest.Data;
 import com.example.jcompia.tutoralnavi3.rest.adapter.CardAdapter;
@@ -26,7 +30,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -92,8 +95,18 @@ public class LoginFragment extends Fragment {
         final Button loginButton = (Button) rootView.findViewById(R.id.loginButton);
         final TextView registerButton = (TextView) rootView.findViewById(R.id.registerButton);
         final CardAdapter mCardAdapter = new CardAdapter();
-        GithubService service = ServiceFactory.createRetrofitService(GithubService.class, GithubService.SERVICE_ENDPOINT); // Url 이 설정되어있고 호출할수있는 메소드가 정의된 서비를 정의한다.
+        Account account = GenericAccountService.GetAccount();
+        AccountManager accountManager = (AccountManager) getContext().getSystemService(Context.ACCOUNT_SERVICE);
+        Account[] accounts = accountManager.getAccountsByType("com.example.jcompia.tutoralnavi3.AccountType");
+        Log.e("accounts", ""+accounts.length);
 
+        if(accounts.length>0){
+            account = accounts[0];
+        }
+
+        GithubService service = ServiceFactory.createRetrofitService(GithubService.class, GithubService.SERVICE_ENDPOINT, MainActivity.mContext,account); // Url 이 설정되어있고 호출할수있는 메소드가 정의된 서비를 정의한다.
+
+        Account finalAccount = account;
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Map<String,String> parameters = new HashMap<>();
@@ -110,7 +123,14 @@ public class LoginFragment extends Fragment {
                             @Override
                             public void onNext(Map map) {
                                 Log.e("GithubDemo", map.toString());
+
                                 //headers = { Authorization: `Bearer ${access_token}` };
+                                Token token = new Token(parameters.get("username"),map.toString());
+
+                                //계정이 이미 있다고 해서.. 한번 넣고 끝인가.
+                                //accountManager.addAccountExplicitly(account, null, null);
+
+                                accountManager.setAuthToken(finalAccount,"full_access",map.toString());
                             }
 
                             @Override
@@ -161,12 +181,16 @@ public class LoginFragment extends Fragment {
         //return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
+
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
+
+
 
     /*@Override
     public void onAttach(Context context) {
