@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.jcompia.tutoralnavi3.FragmentActivity;
 import com.example.jcompia.tutoralnavi3.MainActivity;
 import com.example.jcompia.tutoralnavi3.R;
 import com.example.jcompia.tutoralnavi3.rest.adapter.CardAdapter;
@@ -104,9 +105,11 @@ public class DashboardFragment extends Fragment {
         Account account = GenericAccountService.GetAccount();
         AccountManager accountManager = (AccountManager) getContext().getSystemService(Context.ACCOUNT_SERVICE);
         Account[] accounts = accountManager.getAccountsByType("com.example.jcompia.tutoralnavi3.AccountType");
-        Log.e("accounts", ""+accounts.length);
+        Log.e("DashboardAccount", ""+accounts.length);
         if(accounts.length>0){
             account = accounts[0];
+        }else{
+            ((FragmentActivity)getActivity()).switchFragment(new LoginFragment());
         }
 
         GithubService service = ServiceFactory.createRetrofitService(GithubService.class, GithubService.SERVICE_ENDPOINT, MainActivity.mContext,account); // Url 이 설정되어있고 호출할수있는 메소드가 정의된 서비를 정의한다.

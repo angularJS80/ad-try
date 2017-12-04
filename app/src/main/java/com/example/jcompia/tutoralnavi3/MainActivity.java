@@ -133,15 +133,14 @@ public class MainActivity extends AppCompatActivity {
                         }
                     case R.id.navi_todoList: startActivity(new Intent(getApplicationContext(), TodoActivity.class));
                         return true;
-                    case R.id.navi_fragment: startActivity(new Intent(getApplicationContext(), FragmentActivity.class));
 
+                        case R.id.navi_fragment: startActivity(new Intent(getApplicationContext(), FragmentActivity.class));
                         return true;
-                    /*case R.id.navi_fragment_login:startActivity(new Intent(getApplicationContext(), FragmentActivity.class));
-                        fragment = new LoginFragment();
-                        fragmentTransaction.replace( R.id.fragment_place, fragment );
-                        fragmentTransaction.commit();
 
-                        return true;*/
+                    case R.id.navi_fragment_logout:
+                        startActivity(new Intent(getApplicationContext(), FragmentActivity.class));
+                        ((FragmentActivity)FragmentActivity.mContext).logOut();
+                        return true;
 
 
                 }

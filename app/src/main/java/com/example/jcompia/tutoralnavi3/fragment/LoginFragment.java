@@ -100,7 +100,7 @@ public class LoginFragment extends Fragment {
         Account account = GenericAccountService.GetAccount();
         AccountManager accountManager = (AccountManager) getContext().getSystemService(Context.ACCOUNT_SERVICE);
         Account[] accounts = accountManager.getAccountsByType("com.example.jcompia.tutoralnavi3.AccountType");
-        Log.e("accounts", ""+accounts.length);
+        Log.e("Loginfragment accounts", ""+accounts.length);
 
         if(accounts.length>0){
             account = accounts[0];
@@ -133,7 +133,7 @@ public class LoginFragment extends Fragment {
                         Log.e("GithubDemo", map.toString());
                         Log.e("GithubDemo", map.get("token").toString());
                         //계정이 이미 있다고 해서.. 한번 넣고 끝인가.
-                        //accountManager.addAccountExplicitly(account, null, null);
+                        accountManager.addAccountExplicitly(finalAccount, null, null);
                         accountManager.setAuthToken(finalAccount,"full_access",map.get("token").toString());
                         ((FragmentActivity)getActivity()).switchFragment(new DashboardFragment());
                     }

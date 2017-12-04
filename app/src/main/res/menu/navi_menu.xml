@@ -46,9 +46,9 @@
         android:title="FregmentLayout"
         ></item>
     <item
-        android:id="@+id/navi_fragment_login"
+        android:id="@+id/navi_fragment_logout"
         android:icon="@drawable/ic_person_pin_black"
-        android:title="FregmentLayoutLogin"
+        android:title="FregmentLayoutLogOut"
         ></item>
 
 
