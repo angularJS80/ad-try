@@ -34,6 +34,8 @@ public class ServiceFactory {
 
                 Request newRequest  = chain.request().newBuilder()
                         .addHeader("Authorization", ""+getToken(context,account) )
+                        .addHeader("Content-Type", "application/json")
+
                         .build();
                 return chain.proceed(newRequest);
             }
@@ -71,7 +73,7 @@ public class ServiceFactory {
         }
 
         String authToken =  result.getString(AccountManager.KEY_AUTHTOKEN);*/
-        Log.e("authToken ", "test"+authToken );
+        Log.e("authToken ", "authToken : "+authToken );
         return authToken;
     }
 

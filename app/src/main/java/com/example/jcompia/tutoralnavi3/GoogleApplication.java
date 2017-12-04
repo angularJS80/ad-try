@@ -96,7 +96,7 @@ public class GoogleApplication extends Application{
         if (opr.isDone()) {
             // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
             // and the GoogleSignInResult will be available instantly.
-            Toast.makeText(mContext, "Got cached sign-in",     Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext, "Got cached sign-in",     Toast.LENGTH_SHORT).show();
 
             GoogleSignInResult result = opr.get();
             handleSignInResult(result);
@@ -117,11 +117,11 @@ public class GoogleApplication extends Application{
     }
 
     public void handleSignInResult(GoogleSignInResult result) {
-        Toast.makeText(mContext, "handleSignInResult:" + result.isSuccess(),     Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext, "handleSignInResult:" + result.isSuccess(),     Toast.LENGTH_SHORT).show();
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             acct = result.getSignInAccount();
-            Toast.makeText(mContext, "handleSignInResult getEmail:" + acct.getEmail()+"getAccount:" + acct.getAccount()+"getIdToken:" + acct.getIdToken(),     Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext, "handleSignInResult getEmail:" + acct.getEmail()+"getAccount:" + acct.getAccount()+"getIdToken:" + acct.getIdToken(),     Toast.LENGTH_SHORT).show();
 
             // mStatusTextView.setText(acct.getDisplayName());
             //updateUI(true);

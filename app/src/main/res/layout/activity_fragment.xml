@@ -6,17 +6,25 @@
     android:fillViewport="true"
     >
         <LinearLayout
+            android:id="@+id/fragment_place"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_gravity="center"
             android:orientation="vertical">
 
-                <fragment
+                <!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/fragment_place"
-                    android:name="com.example.jcompia.tutoralnavi3.fragment.LoginFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent" />-->
+
+           <!-- <fragment
+                android:id="@+id/fragment_place"
+                android:name="com.example.jcompia.tutoralnavi3.fragment.LoginFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+              />-->
+
         </LinearLayout>
 
 

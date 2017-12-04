@@ -6,22 +6,20 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.jcompia.tutoralnavi3.FragmentActivity;
 import com.example.jcompia.tutoralnavi3.MainActivity;
 import com.example.jcompia.tutoralnavi3.R;
 import com.example.jcompia.tutoralnavi3.rest.adapter.CardAdapter;
 import com.example.jcompia.tutoralnavi3.rest.service.GithubService;
 import com.example.jcompia.tutoralnavi3.rest.service.ServiceFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,12 +31,12 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link LoginFragment.OnFragmentInteractionListener} interface
+ * {@link DashboardFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link LoginFragment#newInstance} factory method to
+ * Use the {@link DashboardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginFragment extends Fragment {
+public class DashboardFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -52,8 +50,7 @@ public class LoginFragment extends Fragment {
     private static final String TAG = "LoginFragment";
     private Context mContext;
 
-
-    public LoginFragment() {
+    public DashboardFragment() {
         // Required empty public constructor
     }
 
@@ -63,11 +60,11 @@ public class LoginFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment LoginFragment.
+     * @return A new instance of fragment DashboardFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static LoginFragment newInstance(String param1, String param2) {
-        LoginFragment fragment = new LoginFragment();
+    public static DashboardFragment newInstance(String param1, String param2) {
+        DashboardFragment fragment = new DashboardFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -87,55 +84,54 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        Toast.makeText(getActivity(), "LoginFragment!",     Toast.LENGTH_SHORT).show();
-        View rootView = inflater.inflate(R.layout.fragment_login, container, false);
-        final EditText idText = (EditText) rootView.findViewById(R.id.idText);
-        final EditText passwordText = (EditText) rootView.findViewById(R.id.idText);
-        final Button loginButton = (Button) rootView.findViewById(R.id.loginButton);
-        final TextView registerButton = (TextView) rootView.findViewById(R.id.registerButton);
+       /* final Button dash_btn_01 = (Button) rootView.findViewById(R.id.dash_btn_01);
+        dash_btn_01.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "fragment_dashboard",     Toast.LENGTH_SHORT).show();
+                ((FragmentActivity)getActivity()).switchFragment(new LoginFragment());
+            }
+        });*/
+
+        RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         final CardAdapter mCardAdapter = new CardAdapter();
+        mRecyclerView.setAdapter(mCardAdapter);
 
 
         Account account = GenericAccountService.GetAccount();
         AccountManager accountManager = (AccountManager) getContext().getSystemService(Context.ACCOUNT_SERVICE);
         Account[] accounts = accountManager.getAccountsByType("com.example.jcompia.tutoralnavi3.AccountType");
         Log.e("accounts", ""+accounts.length);
-
         if(accounts.length>0){
             account = accounts[0];
         }
-        Account finalAccount = account;
 
-        GithubService service = ServiceFactory.createRetrofitService(GithubService.class, GithubService.SERVICE_ENDPOINT, MainActivity.mContext,finalAccount); // Url 이 설정되어있고 호출할수있는 메소드가 정의된 서비를 정의한다.
-
-
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Map<String,String> parameters = new HashMap<>();
-                parameters.put("username",idText.getText().toString());
-                parameters.put("password",passwordText.getText().toString());
-                //Github github = new Github();
-                service.authenticateUser(parameters) // 서비스의 결과는 옵저버를을 반환 함으로 이후의 처리는 옵저버블형태이다.
+        GithubService service = ServiceFactory.createRetrofitService(GithubService.class, GithubService.SERVICE_ENDPOINT, MainActivity.mContext,account); // Url 이 설정되어있고 호출할수있는 메소드가 정의된 서비를 정의한다.
+        Map<String,String> parameters = new HashMap<>();
+        service.getHeroList(parameters) // 서비스의 결과는 옵저버를을 반환 함으로 이후의 처리는 옵저버블형태이다.
                 .subscribeOn(Schedulers.newThread())
-
                 .observeOn(AndroidSchedulers.mainThread())
-
                 .subscribe(new Observer<Map>() {
                     @Override
-                    public void onSubscribe(Disposable d) {
-                        Log.e("Disposable", d.toString());
-                    }
+                    public void onSubscribe(Disposable d) {}
 
                     @Override
                     public void onNext(Map map) {
                         Log.e("GithubDemo", map.toString());
-                        Log.e("GithubDemo", map.get("token").toString());
                         //계정이 이미 있다고 해서.. 한번 넣고 끝인가.
                         //accountManager.addAccountExplicitly(account, null, null);
-                        accountManager.setAuthToken(finalAccount,"full_access",map.get("token").toString());
-                        ((FragmentActivity)getActivity()).switchFragment(new DashboardFragment());
+                        for(int i=0;i<((ArrayList) map.get("rtnList")).size();i++){
+                            Log.e("rtnList", String.valueOf(i));
+                            mCardAdapter.addData((Map)((ArrayList) map.get("rtnList")).get(i));
+                        }
+
+
+                        //mCardAdapter.setAraay((ArrayList) map.get("rtnList"));
+
+//                        mCardAdapter.addData(map);
                     }
 
                     @Override
@@ -147,48 +143,12 @@ public class LoginFragment extends Fragment {
                     public void onComplete() {}
 
                 });
-            }
 
-        });
-/*
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                for(String login : Data.githubList) {
-                    service.getHeroList()
-                            .subscribeOn(Schedulers.newThread())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Observer<Github>() {
-                                @Override
-                                public void onSubscribe(Disposable d) {}
-
-                                @Override
-                                public void onNext(Github github) {
-                                    mCardAdapter.addData(github);
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-                                    Log.e("GithubDemo", e.getMessage());
-                                }
-
-                                @Override
-                                public void onComplete() {}
-
-                            });
-                }
-            }
-
-        });
-*/
-
+        // Inflate the layout for this fragment
 
         return rootView;
-
-        //return inflater.inflate(R.layout.fragment_login, container, false);
     }
-
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -196,8 +156,6 @@ public class LoginFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
-
 
     @Override
     public void onAttach(Context context) {
@@ -217,12 +175,11 @@ public class LoginFragment extends Fragment {
 
     }
 
-    /*
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }*/
+    }
 
     /**
      * This interface must be implemented by activities that contain this

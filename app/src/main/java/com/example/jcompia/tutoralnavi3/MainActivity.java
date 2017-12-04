@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -94,12 +97,16 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
 
         NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigationView);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Toast.makeText(MainActivity.this, "onNavigationItemSelected!"+item.getItemId(),     Toast.LENGTH_SHORT).show();
+                Fragment fragment = new Fragment();
+                //Toast.makeText(MainActivity.this, "onNavigationItemSelected!"+item.getItemId(),     Toast.LENGTH_SHORT).show();
                 switch (item.getItemId()){
                     case R.id.navi_home: startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         return true;
@@ -118,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.navi_firebasesavedata:
-                        Toast.makeText(MainActivity.this, "GoogleSignActivity.acct"+googleService.getGoogleSignAccount(),     Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "GoogleSignActivity.acct"+googleService.getGoogleSignAccount(),     Toast.LENGTH_SHORT).show();
                         if(acct!=null){
                             FireBaseTester fireBaseTester = new FireBaseTester(MainActivity.this);
                             fireBaseTester.setMsg("onMenu FireBase Clicked!");
@@ -127,8 +134,14 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.navi_todoList: startActivity(new Intent(getApplicationContext(), TodoActivity.class));
                         return true;
                     case R.id.navi_fragment: startActivity(new Intent(getApplicationContext(), FragmentActivity.class));
-                        return true;
 
+                        return true;
+                    /*case R.id.navi_fragment_login:startActivity(new Intent(getApplicationContext(), FragmentActivity.class));
+                        fragment = new LoginFragment();
+                        fragmentTransaction.replace( R.id.fragment_place, fragment );
+                        fragmentTransaction.commit();
+
+                        return true;*/
 
 
                 }
@@ -238,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
         if (opr.isDone()) {
             // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
             // and the GoogleSignInResult will be available instantly.
-            Toast.makeText(mContext, "Got cached sign-in",     Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext, "Got cached sign-in",     Toast.LENGTH_SHORT).show();
 
             GoogleSignInResult result = opr.get();
             handleSignInResult(result);
@@ -258,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void handleSignInResult(GoogleSignInResult result) {
-        Toast.makeText(mContext, "handleSignInResult:" + result.isSuccess(),     Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext, "handleSignInResult:" + result.isSuccess(),     Toast.LENGTH_SHORT).show();
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             acct = result.getSignInAccount();

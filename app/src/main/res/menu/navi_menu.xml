@@ -45,4 +45,11 @@
         android:icon="@drawable/ic_person_pin_black"
         android:title="FregmentLayout"
         ></item>
+    <item
+        android:id="@+id/navi_fragment_login"
+        android:icon="@drawable/ic_person_pin_black"
+        android:title="FregmentLayoutLogin"
+        ></item>
+
+
 </menu>
