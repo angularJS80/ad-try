@@ -141,6 +141,11 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), FragmentActivity.class));
                         ((FragmentActivity)FragmentActivity.mContext).logOut();
                         return true;
+                    case R.id.navi_sample_kakaologin:
+                        startActivity(new Intent(getApplicationContext(), KakaoTalkMainActivity.class));
+                        return true;
+
+
 
 
                 }

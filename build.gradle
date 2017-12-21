@@ -6,6 +6,7 @@ buildscript {
         google()
         maven { url 'https://maven.google.com' }
         jcenter()
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
@@ -20,6 +21,13 @@ allprojects {
         jcenter()
         maven { url 'https://maven.google.com' }
         mavenLocal()
+    }
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+        maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
     }
 }
 
