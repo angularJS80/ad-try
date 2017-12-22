@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/tutoralNavi.iml" filepath="$PROJECT_DIR$/tutoralNavi.iml" />
-
+      <module fileurl="file://$PROJECT_DIR$/tutorNavi.iml" filepath="$PROJECT_DIR$/tutorNavi.iml" />
+      <module fileurl="file://D:\seven\tutorNavi\tutoralNavi.iml" filepath="D:\seven\tutorNavi\tutoralNavi.iml" />
     </modules>
   </component>
 </project>

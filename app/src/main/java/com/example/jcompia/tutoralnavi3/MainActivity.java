@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
     private GoogleService googleService; // 서비스 객체
     private boolean mBound = false;    // 서비스 연결 여부
-
     boolean isService = false; // 서비스 중인 확인용
 
 
@@ -145,8 +144,9 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), KakaoTalkMainActivity.class));
                         return true;
 
-
-
+                    case R.id.navi_sample_facelogin:
+                        startActivity(new Intent(getApplicationContext(), FaceBookLoginActivity.class));
+                        return true;
 
                 }
 

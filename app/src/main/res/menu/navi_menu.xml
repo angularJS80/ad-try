@@ -55,6 +55,14 @@
         android:icon="@drawable/ic_person_pin_black"
         android:title="KakaoLogin"
         ></item>
+    <item
+        android:id="@+id/navi_sample_facelogin"
+        android:icon="@drawable/ic_person_pin_black"
+        android:title="FaceLogin"
+        ></item>
+
+
+
 
 
 

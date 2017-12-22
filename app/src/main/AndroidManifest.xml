@@ -48,7 +48,6 @@
                 android:resource="@xml/authenticator" />
         </service>
 
-
         <!-- 3 -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -66,7 +65,34 @@
             </intent-filter>
         </activity>
         -->
-        <activity android:name=".KakaoTalkMainActivity"></activity>
+        <activity android:name=".KakaoTalkMainActivity" />
+
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            />
+
+
+        <activity
+            android:name=".FaceBookLoginActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".FaceBookLogoutActivity"
+            android:label="@string/signed_out" >
+        </activity>
+
+
+
     </application>
 
 </manifest>
