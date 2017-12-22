@@ -2,7 +2,7 @@
 <resources>
     <!--<string name="app_name">Kakao SDK Sample</string>-->
 
-    <string name="kakao_app_key"></string>
+    <string name="kakao_app_key">fba392b1bd51652177dc927309477df0</string>
     <string name="text_kakaostory">KakaoStory</string>
     <string name="text_kakaotalk">KakaoTalk</string>
     <string name="text_push">Push</string>

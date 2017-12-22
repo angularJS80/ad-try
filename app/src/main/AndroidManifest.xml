@@ -48,14 +48,7 @@
                 android:resource="@xml/authenticator" />
         </service>
 
-        <!-- 2 -->
-        <activity android:name=".SampleLoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <!-- 3 -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"

@@ -33,14 +33,18 @@ public class KakaoTalkMainActivity extends MainActivity {
     private Button loginout_button;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+
+        // 1 화면이 로드될때 카카오톡이 이미 인증된 사용자인지 여부를 체크한다.
         KakaorequestMe();
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_common_kakao_login);
 
         // 헤쉬키를 가져온다
         getAppKeyHash();
 
-
+        // 3 - N 로그인 버튼을 클릭한다.
         login_button = (Button) findViewById(R.id.button_login_with_activity);
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +53,7 @@ public class KakaoTalkMainActivity extends MainActivity {
                 isKakaoLogin();
             }
         });
-
+        // 3 - Y 로그아웃으로 세션을 종료한다.
         loginout_button = (Button) findViewById(R.id.button_login_with_fragment);
         loginout_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +82,8 @@ public class KakaoTalkMainActivity extends MainActivity {
         mKakaocallback = new SessionCallback();
         com.kakao.auth.Session.getCurrentSession().addCallback(mKakaocallback);
         com.kakao.auth.Session.getCurrentSession().checkAndImplicitOpen();
+
+        // 2 로그인이 처음일경우 3자 동의창을 호출한다.
         com.kakao.auth.Session.getCurrentSession().open(AuthType.KAKAO_TALK_EXCLUDE_NATIVE_LOGIN, KakaoTalkMainActivity.this);
     }
 
@@ -97,6 +103,7 @@ public class KakaoTalkMainActivity extends MainActivity {
         }
     }
 
+    // 3자 동의창에서 동의하면 일루 떨어지고  //2- Y 이미 되어있으면 사용자 정보를 로그로 찍는다.
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
@@ -121,12 +128,13 @@ public class KakaoTalkMainActivity extends MainActivity {
                     Log.d("TAG" , "오류로 카카오로그인 실패 ");
                 }
             }
-
+            // 2- N 종료된다.
             @Override
             public void onSessionClosed(ErrorResult errorResult) {
                 Log.d("TAG" , "오류로 카카오로그인 실패 ");
             }
 
+            //2- Y 이미 되어있으면 사용자 정보를 로그로 찍는다.
             @Override
             public void onSuccess(UserProfile userProfile) {
                 Log.d("TAG" , String.valueOf(userProfile.getProfileImagePath()));
