@@ -114,6 +114,15 @@ public class DashboardFragment extends Fragment {
 
         GithubService service = ServiceFactory.createRetrofitService(GithubService.class, GithubService.SERVICE_ENDPOINT, MainActivity.mContext,account); // Url 이 설정되어있고 호출할수있는 메소드가 정의된 서비를 정의한다.
         Map<String,String> parameters = new HashMap<>();
+
+        /*Observable observable = new Observable() {
+            @Override
+            protected void subscribeActual(Observer observer) {
+
+            }
+        };
+
+        observable = service.getHeroList(parameters));*/// 서비스의 결과는 옵저버를을 반환 함으로 이후의 처리는 옵저버블형태이다.
         service.getHeroList(parameters) // 서비스의 결과는 옵저버를을 반환 함으로 이후의 처리는 옵저버블형태이다.
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

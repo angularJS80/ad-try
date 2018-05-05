@@ -32,6 +32,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.google.android.gms:play-services-auth:11.6.0'
+
+    //Piccaso
+    compile 'com.squareup.picasso:picasso:2.5.2'
     // Firebase
     compile 'com.google.firebase:firebase-database:11.6.0'
     compile 'com.google.firebase:firebase-storage:11.6.0'
