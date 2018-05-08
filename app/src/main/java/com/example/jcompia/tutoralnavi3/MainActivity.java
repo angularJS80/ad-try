@@ -107,8 +107,11 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment = new Fragment();
                 //Toast.makeText(MainActivity.this, "onNavigationItemSelected!"+item.getItemId(),     Toast.LENGTH_SHORT).show();
                 switch (item.getItemId()){
+                    case R.id.navi_mvphome: startActivity(new Intent(getApplicationContext(), MvpHomeActivity.class));
+                        return true;
                     case R.id.navi_home: startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         return true;
+
                     case R.id.navi_account: startActivity(new Intent(getApplicationContext(), AccountActivity.class));
                         return true;
                     case R.id.navi_webview: startActivity(new Intent(getApplicationContext(), WebViewActivity.class));

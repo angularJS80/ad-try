@@ -7,7 +7,10 @@
         android:id="@+id/navi_home"
         android:icon="@drawable/ic_settings_applications_black"
         android:title="Home"/>
-
+    <item
+        android:id="@+id/navi_mvphome"
+        android:icon="@drawable/ic_settings_applications_black"
+        android:title="HomeMvp"/>
     <item
         android:id="@+id/navi_account"
         android:icon="@drawable/ic_person_pin_black"

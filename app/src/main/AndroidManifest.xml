@@ -25,7 +25,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".AccountActivity" />
+        <activity android:name=".MvpHomeActivity" />
         <activity android:name=".HomeActivity" />
+
         <activity android:name=".WebViewActivity" />
         <activity android:name=".GoogleSignActivity" />
 
