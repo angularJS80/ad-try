@@ -14,13 +14,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Home"
+            android:text="MvpHome"
             android:gravity="center"
             android:textColor="#1a1a1a"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/wv"
+            android:id="@+id/wv2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="resultText"

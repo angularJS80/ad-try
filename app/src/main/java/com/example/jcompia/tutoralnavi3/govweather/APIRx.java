@@ -13,9 +13,9 @@ import retrofit2.http.QueryMap;
  * Created by jun on 2017-11-26.
  */
 
-public interface  API {
+public interface APIRx {
     @GET("/service/WetherSpcnwsInfoService/WeatherInformation")
-    Call<WetherSpcnwsInfoServiceVO> getWeatherInformation(
+    Observable<WetherSpcnwsInfoServiceVO> getWeatherInformation(
             @QueryMap(encoded = true) Map<String, String> options
     );
 }

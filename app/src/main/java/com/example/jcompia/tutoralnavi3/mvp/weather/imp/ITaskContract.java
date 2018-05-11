@@ -5,9 +5,14 @@ import com.example.jcompia.tutoralnavi3.mvp.comm.imp.IBaseView;
 
 public interface ITaskContract  {
     interface Presenter extends IBasePresenter {
-        void getWeather();
+        String getWeather();
+
+        String getWeatherRx();
     }
+
+    /* 뷰때어내보기
+
     interface View extends IBaseView<Presenter> {
         void showWeather(String weather);
-    }
+    }*/
 }
