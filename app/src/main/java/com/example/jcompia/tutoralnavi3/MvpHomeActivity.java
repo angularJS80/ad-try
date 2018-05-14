@@ -80,14 +80,14 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
         resultText.setText(mTaskPresenter.getWeather()); //
         mTaskPresenter = new TaskPresenter(this);
 
-        //Observable obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn));
+        Observable obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn));
 
-        ConnectableObservable obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn)).publish();
+        //ConnectableObservable obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn)).publish();
 
         obsable.subscribe(otherObserver());
         obsable.subscribe(wheatehrObserver());
 
-        obsable.connect();
+        //obsable.connect();
 
         Toast.makeText(MvpHomeActivity.this, "MvpHomeActivity!", Toast.LENGTH_SHORT).show();
     }
@@ -95,7 +95,8 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     /*서버통신관련한 버튼에 대한 공통정의 */
     private Observable serverCallBtnObservable(Button button) {
         Observable observable = RxView.clicks(button)
-                .throttleFirst(1, TimeUnit.SECONDS)
+               // .throttleFirst(1, TimeUnit.SECONDS)
+                .debounce(1, TimeUnit.SECONDS)
 
                 //.observeOn(AndroidSchedulers.mainThread())
                 //.subscribeOn(Schedulers.newThread())

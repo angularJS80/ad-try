@@ -32,7 +32,7 @@
             android:id="@+id/rxJavaTstBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="rxJavaTest" />
+            android:text="rxJava 연타해도 1번콜" />
 
         <Button
             android:id="@+id/aSyncTestBtn"
