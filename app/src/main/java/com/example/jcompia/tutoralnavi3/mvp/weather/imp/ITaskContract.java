@@ -10,9 +10,9 @@ public interface ITaskContract  {
         String getWeatherRx();
     }
 
-    /* 뷰때어내보기
+
 
     interface View extends IBaseView<Presenter> {
         void showWeather(String weather);
-    }*/
+    }
 }

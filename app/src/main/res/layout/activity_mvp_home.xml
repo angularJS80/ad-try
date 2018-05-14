@@ -20,14 +20,27 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/wv2"
+            android:id="@+id/resultText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="resultText"
             android:gravity="center"
+            android:text="resultText"
             android:textColor="#1a1a1a"
             android:textSize="20sp" />
 
+        <Button
+            android:id="@+id/rxJavaTstBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="rxJavaTest" />
+
+        <Button
+            android:id="@+id/aSyncTestBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="aSyncTaskTest" />
+
     </LinearLayout>
+
 </ScrollView>
 

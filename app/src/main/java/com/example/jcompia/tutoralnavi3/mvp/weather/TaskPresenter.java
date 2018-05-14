@@ -27,12 +27,13 @@ public class TaskPresenter implements ITaskContract.Presenter {
     WeatherRepository weatherRepository;
     private Gson GSON = new Gson();
     String responseString;
-    // 뷰때어내기 ITaskContract.View view;
+    ITaskContract.View view;
 
-    /*뷰 때어내기 public TaskPresenter(ITaskContract.View view) {
-        //this.view = view;
+
+    public TaskPresenter(ITaskContract.View view) {
+        this.view = view;
         view.setPresenter(this);
-    }*/
+    }
 
     @Override
     public void start() {
@@ -50,6 +51,8 @@ public class TaskPresenter implements ITaskContract.Presenter {
         API api= retrofit.create(API.class);
 
         Call<WetherSpcnwsInfoServiceVO> call = api.getWeatherInformation(getinput());
+
+
         WeatherAsyncTask weatherAsyncTask = new WeatherAsyncTask(call);
         /*레트로핏 서버통신관련 호출대상 종료 */
 
@@ -61,8 +64,12 @@ public class TaskPresenter implements ITaskContract.Presenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        view.showWeather(responseString);
+
         return responseString;
-        //view.showWeather(retVal);
+
+
     }
 
 
@@ -107,7 +114,6 @@ public class TaskPresenter implements ITaskContract.Presenter {
         Log.e("getWeatherRx", "responseString : "+responseString);
         observable.subscribe(wetherObserver);
         return responseString;
-        //view.showWeather(retVal);
     }
 
     public Observable<WetherSpcnwsInfoServiceVO> getWeatherObsable() {

@@ -63,7 +63,11 @@
         android:icon="@drawable/ic_person_pin_black"
         android:title="FaceLogin"
         ></item>
-
+    <item
+        android:id="@+id/navi_movilist"
+        android:icon="@drawable/ic_person_pin_black"
+        android:title="MoviList"
+        ></item>
 
 
 

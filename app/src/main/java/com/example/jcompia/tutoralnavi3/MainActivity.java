@@ -26,6 +26,8 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import butterknife.ButterKnife;
+
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -149,6 +151,9 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.navi_sample_facelogin:
                         startActivity(new Intent(getApplicationContext(), FaceBookLoginActivity.class));
+                        return true;
+                    case R.id.navi_movilist:
+                        startActivity(new Intent(getApplicationContext(), MoviActivity.class));
                         return true;
 
                 }

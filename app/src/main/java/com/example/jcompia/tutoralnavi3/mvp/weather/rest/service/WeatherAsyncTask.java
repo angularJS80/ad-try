@@ -15,6 +15,15 @@ import java.util.Map;
 import retrofit2.Call;
 
 
+
+class  ShopAsyncTask extends AsyncTask{
+
+    @Override
+    protected Object doInBackground(Object[] objects) {
+        return null;
+    }
+}
+
 public class WeatherAsyncTask extends AsyncTask<Map<String, String>, Void, String> {
     Call call ;
     private  Gson GSON = new Gson();
