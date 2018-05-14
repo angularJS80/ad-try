@@ -13,18 +13,24 @@ import android.widget.Toast;
 import com.example.jcompia.tutoralnavi3.mvp.weather.TaskPresenter;
 import com.example.jcompia.tutoralnavi3.mvp.weather.ViewPresenter;
 import com.example.jcompia.tutoralnavi3.mvp.weather.imp.ITaskContract;
-//import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observables.ConnectableObservable;
+import io.reactivex.schedulers.Schedulers;
 
-//import rx.Observable;
-//import rx.Observer;
-//import rx.schedulers.Schedulers;
+//import com.jakewharton.rxbinding.view.RxView;
 
 
-public class MvpHomeActivity extends MainActivity /*뷰때어내기 implements ITaskContract.View*/ {
+public class MvpHomeActivity extends MainActivity implements ITaskContract.View {
     private static final String TAG = "HomeActivity";
 
     ITaskContract.Presenter mPresenter;
@@ -54,7 +60,6 @@ public class MvpHomeActivity extends MainActivity /*뷰때어내기 implements I
         init();
 
 
-
     }
 
     private void init() {
@@ -73,23 +78,40 @@ public class MvpHomeActivity extends MainActivity /*뷰때어내기 implements I
         mViewPresenter = new ViewPresenter(resultText);
         // retrofit2 + AsyncTask 방식
         resultText.setText(mTaskPresenter.getWeather()); //
-        //mTaskPresenter = new TaskPresenter(this); 뷰때어내기
+        mTaskPresenter = new TaskPresenter(this);
 
-        //serverCallBtnObservable(rxJavaTstBtn).subscribe(wheatehrObserver());
+        //Observable obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn));
+
+        ConnectableObservable obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn)).publish();
+
+        obsable.subscribe(otherObserver());
+        obsable.subscribe(wheatehrObserver());
+
+        obsable.connect();
 
         Toast.makeText(MvpHomeActivity.this, "MvpHomeActivity!", Toast.LENGTH_SHORT).show();
     }
 
     /*서버통신관련한 버튼에 대한 공통정의 */
-    /*private Observable serverCallBtnObservable(Button button){
-        Observable observable =  RxView.clicks(button)
-                .observeOn(Schedulers.io())
-                .subscribeOn(Schedulers.newThread());
+    private Observable serverCallBtnObservable(Button button) {
+        Observable observable = RxView.clicks(button)
+                .throttleFirst(1, TimeUnit.SECONDS)
+
+                //.observeOn(AndroidSchedulers.mainThread())
+                //.subscribeOn(Schedulers.newThread())
+                /*.map(data -> (
+                        Log.d("button Clicked", "button Clicked")
+                ))*/;
         return observable;
     }
 
-    private Observer wheatehrObserver(){
-        Observer observer = new rx.Observer() {
+    private Observer wheatehrObserver() {
+        Observer observer = new Observer() {
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                Log.d(TAG, "onSubscribe");
+            }
 
             @Override
             public void onNext(Object o) {
@@ -97,29 +119,63 @@ public class MvpHomeActivity extends MainActivity /*뷰때어내기 implements I
                 mTaskPresenter.getWeatherObsable().subscribe(mViewPresenter.getWetherObserver());
             }
 
-            @Override
-            public void onCompleted() {
-
-            }
 
             @Override
             public void onError(Throwable e) {
+                Log.d(TAG, "onError"+e.toString());
+            }
 
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "onComplete");
             }
 
         };
         return observer;
     }
-*/
 
-    /* 뷰때어내기
+    private Observer otherObserver() {
+        Observer observer = new Observer() {
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                Log.d(TAG, "otherObserver onSubscribe");
+            }
+
+            @Override
+            public void onNext(Object o) {
+                Toast.makeText(MvpHomeActivity.this, "otherObserver!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "otherObserver onNext");
+            }
+
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "otherObserver"+e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "otherObserver");
+            }
+
+        };
+        return observer;
+    }
+
+
     @Override
     public void showWeather(String weather) {
-        Toast.makeText(MvpHomeActivity.this, weather, Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void setPresenter(ITaskContract.Presenter presenter) {
-        mPresenter = presenter;
+
+    }
+
+    /*@OnClick(R.id.rxJavaTstBtn)
+    public void onViewClicked() {
+        Log.d(TAG, "onViewClicked");
     }*/
 }
