@@ -61,6 +61,12 @@
             android:layout_height="wrap_content"
             android:text="날씨가져오기 기본 rx + Publish" />
 
+        <Button
+            android:id="@+id/rxIntervalPublishTestBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="주기적 발생자원 구독자 추가" />
+
 
         <TextView
             android:id="@+id/resultText"

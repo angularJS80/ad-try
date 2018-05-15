@@ -27,6 +27,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 
 //import com.jakewharton.rxbinding.view.RxView;
 
@@ -52,8 +53,12 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     Observable wetherObservable;
     Observable<String> obsable;
     Observable<String> addMapBtnObsable;
-
     ConnectableObservable cobsable;
+
+
+    Observable<Long> cold= Observable.interval(1000, TimeUnit.MILLISECONDS);
+    PublishSubject<Long> publishSubject= PublishSubject.create();
+
 
     @BindView(R.id.rxAddMapTestBtn)
     Button rxAddMapTestBtn;
@@ -65,6 +70,8 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     Button rxChangePublishTestBtn;
     @BindView(R.id.rxPublishTestBtn)
     Button rxPublishTestBtn;
+    @BindView(R.id.rxIntervalPublishTestBtn)
+    Button rxIntervalPublishTestBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,8 +121,13 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
         cobsable = wetherObservable.publish();
         cobsable.subscribeOn(Schedulers.io());
 
-
         Toast.makeText(MvpHomeActivity.this, "MvpHomeActivity!", Toast.LENGTH_SHORT).show();
+
+        publishSubject.observeOn(AndroidSchedulers.mainThread());
+        publishSubject.subscribeOn(Schedulers.io());
+        cold.subscribe(publishSubject);
+
+
     }
 
     /*서버통신관련한 버튼에 대한 공통정의 */
@@ -198,6 +210,38 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
         return observer;
     }
 
+    private Observer publishObserver() {
+        Observer observer = new Observer() {
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                Log.d(TAG, "publishObserver onSubscribe");
+            }
+
+            @Override
+            public void onNext(Object o) {
+                Log.d(TAG, "publishObserver onNext" + o);
+
+                //Toast.makeText(MvpHomeActivity.this, o.toString(), Toast.LENGTH_SHORT).show();
+
+
+            }
+
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "publishObserver" + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "publishObserver");
+            }
+
+        };
+
+        return observer;
+    }
 
     @Override
     public void showWeather(String weather) {
@@ -220,7 +264,7 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     public void settingMapBtnClicked() {
         Log.d("settingMapBtnClicked", "changed addMapBtnObsable add Map Operater");
         addMapBtnObsable = serverCallBtnObservable((Button) findViewById(R.id.rxAddMapTestBtn))
-        .debounce(1, TimeUnit.SECONDS)
+                .debounce(1, TimeUnit.SECONDS)
                 .map(event -> {
                     return "rxAddMapTestBtn Map left";
                 }); // 기존정의된 map 에 대하여 제정의 가능
@@ -249,6 +293,11 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
         cobsable.subscribeWith(wheatehrFrontObserver());
         cobsable.connect();
 
+    }
+
+    @OnClick(R.id.rxIntervalPublishTestBtn)
+    public void onRxIntervalPublishTestBtnClicked() {
+        publishSubject.subscribe(publishObserver());
     }
 
 
