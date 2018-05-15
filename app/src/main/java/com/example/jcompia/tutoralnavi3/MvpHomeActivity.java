@@ -1,5 +1,6 @@
 package com.example.jcompia.tutoralnavi3;
 
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -23,7 +24,6 @@ import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observables.ConnectableObservable;
 
 //import com.jakewharton.rxbinding.view.RxView;
 
@@ -41,7 +41,10 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     @BindView(R.id.aSyncTestBtn)
 
     Button aSyncTestBtn;
+    @BindView(R.id.settingMapBtn)
+    Button settingMapBtn;
 
+    Observable obsable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,14 +80,14 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
         mViewPresenter = new ViewPresenter(resultText);
         mTaskPresenter = new TaskPresenter(this);
 
-        //Observable obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn));
+        obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn));
 
-        ConnectableObservable obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn)).publish();
+        //ConnectableObservable obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn)).publish();
 
         obsable.subscribe(otherObserver());
         obsable.subscribe(wheatehrObserver());
 
-        obsable.connect();
+        //obsable.connect();
 
         Toast.makeText(MvpHomeActivity.this, "MvpHomeActivity!", Toast.LENGTH_SHORT).show();
     }
@@ -178,6 +181,14 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
         // retrofit2 + AsyncTask 방식
         resultText.setText(mTaskPresenter.getWeather()); //
     }
+
+    @OnClick(R.id.settingMapBtn)
+    public void settingMapBtnClicked() {
+        Log.d("settingMapBtnClicked","changed obsable add Map Operater");
+        obsable.map(data->(Log.d("settingMapBtnClicked","changed obsable add Map Operater")));
+    }
+
+
 
     /*@OnClick(R.id.rxJavaTstBtn)
     public void onViewClicked() {
