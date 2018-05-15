@@ -22,10 +22,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observables.ConnectableObservable;
-import io.reactivex.schedulers.Schedulers;
 
 //import com.jakewharton.rxbinding.view.RxView;
 
@@ -41,6 +39,7 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     @BindView(R.id.rxJavaTstBtn)
     Button rxJavaTstBtn;
     @BindView(R.id.aSyncTestBtn)
+
     Button aSyncTestBtn;
 
 
@@ -76,18 +75,16 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
             }
         });
         mViewPresenter = new ViewPresenter(resultText);
-        // retrofit2 + AsyncTask 방식
-        resultText.setText(mTaskPresenter.getWeather()); //
         mTaskPresenter = new TaskPresenter(this);
 
-        Observable obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn));
+        //Observable obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn));
 
-        //ConnectableObservable obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn)).publish();
+        ConnectableObservable obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn)).publish();
 
         obsable.subscribe(otherObserver());
         obsable.subscribe(wheatehrObserver());
 
-        //obsable.connect();
+        obsable.connect();
 
         Toast.makeText(MvpHomeActivity.this, "MvpHomeActivity!", Toast.LENGTH_SHORT).show();
     }
@@ -95,7 +92,7 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     /*서버통신관련한 버튼에 대한 공통정의 */
     private Observable serverCallBtnObservable(Button button) {
         Observable observable = RxView.clicks(button)
-               // .throttleFirst(1, TimeUnit.SECONDS)
+                // .throttleFirst(1, TimeUnit.SECONDS)
                 .debounce(1, TimeUnit.SECONDS)
 
                 //.observeOn(AndroidSchedulers.mainThread())
@@ -123,7 +120,7 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
 
             @Override
             public void onError(Throwable e) {
-                Log.d(TAG, "onError"+e.toString());
+                Log.d(TAG, "onError" + e.toString());
             }
 
             @Override
@@ -152,7 +149,7 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
 
             @Override
             public void onError(Throwable e) {
-                Log.d(TAG, "otherObserver"+e.toString());
+                Log.d(TAG, "otherObserver" + e.toString());
             }
 
             @Override
@@ -173,6 +170,13 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     @Override
     public void setPresenter(ITaskContract.Presenter presenter) {
 
+    }
+
+    @OnClick(R.id.aSyncTestBtn)
+    public void onViewClicked() {
+
+        // retrofit2 + AsyncTask 방식
+        resultText.setText(mTaskPresenter.getWeather()); //
     }
 
     /*@OnClick(R.id.rxJavaTstBtn)
