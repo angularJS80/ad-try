@@ -23,7 +23,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Function;
+import io.reactivex.observables.ConnectableObservable;
+import io.reactivex.schedulers.Schedulers;
 
 //import com.jakewharton.rxbinding.view.RxView;
 
@@ -45,7 +51,7 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     Button settingMapBtn;
 
     Observable obsable;
-
+    ConnectableObservable cobsable;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         Toast.makeText(MvpHomeActivity.this, "MvpHomeActivity!", Toast.LENGTH_SHORT).show();
@@ -81,13 +87,15 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
         mTaskPresenter = new TaskPresenter(this);
 
         obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn));
+        obsable.debounce(1, TimeUnit.SECONDS);
 
-        //ConnectableObservable obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn)).publish();
 
-        obsable.subscribe(otherObserver());
+
         obsable.subscribe(wheatehrObserver());
 
-        //obsable.connect();
+         cobsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn)).publish();
+         cobsable.subscribe(otherObserver());
+         cobsable.connect();
 
         Toast.makeText(MvpHomeActivity.this, "MvpHomeActivity!", Toast.LENGTH_SHORT).show();
     }
@@ -95,11 +103,9 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     /*서버통신관련한 버튼에 대한 공통정의 */
     private Observable serverCallBtnObservable(Button button) {
         Observable observable = RxView.clicks(button)
+        .observeOn(AndroidSchedulers.mainThread())
                 // .throttleFirst(1, TimeUnit.SECONDS)
-                .debounce(1, TimeUnit.SECONDS)
 
-                //.observeOn(AndroidSchedulers.mainThread())
-                //.subscribeOn(Schedulers.newThread())
                 /*.map(data -> (
                         Log.d("button Clicked", "button Clicked")
                 ))*/;
@@ -161,6 +167,36 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
             }
 
         };
+
+        return observer;
+    }
+
+    private Observer otherObserver2() {
+        Observer observer = new Observer() {
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                Log.d(TAG, "otherObserver2 onSubscribe");
+            }
+
+            @Override
+            public void onNext(Object o) {
+                Toast.makeText(MvpHomeActivity.this, "otherObserver!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "otherObserver2 onNext");
+            }
+
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "otherObserver2" + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "otherObserver2");
+            }
+
+        };
         return observer;
     }
 
@@ -185,8 +221,24 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     @OnClick(R.id.settingMapBtn)
     public void settingMapBtnClicked() {
         Log.d("settingMapBtnClicked","changed obsable add Map Operater");
-        obsable.map(data->(Log.d("settingMapBtnClicked","changed obsable add Map Operater")));
+        //cobsable.distinct();
+        //cobsable.unsubscribeOn(Schedulers.newThread());
+        //cobsable.subscribeOn(Schedulers.newThread());
+        cobsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn)).publish();
+        cobsable.subscribeOn(Schedulers.newThread());
+        cobsable.map(
+                data->( Log.d(TAG, "settingMapBtnClicked"))
+        );
+        cobsable.subscribeWith(otherObserver2());
+        //cobsable.publish();
+        //cobsable.connect();
+
     }
+
+    public void  showToast(){
+        Toast.makeText(MvpHomeActivity.this, "added Map Oper", Toast.LENGTH_SHORT).show();
+    }
+
 
 
 
