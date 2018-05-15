@@ -51,8 +51,6 @@ public class TaskPresenter implements ITaskContract.Presenter {
         API api= retrofit.create(API.class);
 
         Call<WetherSpcnwsInfoServiceVO> call = api.getWeatherInformation(getinput());
-
-
         WeatherAsyncTask weatherAsyncTask = new WeatherAsyncTask(call);
         /*레트로핏 서버통신관련 호출대상 종료 */
 
@@ -135,7 +133,7 @@ public class TaskPresenter implements ITaskContract.Presenter {
         /*날씨 전송데이터값 시작 */
         final String serviceKey= "hOoqoTjEflU73a4GVB%2FWraajQopg6BxoSZQ6Ie6OMIBG%2FaUoktc7ep2jDZhsJVFHI62DzbqG7pnPbdPauLuM7g%3D%3D";
         final String fromTmFc = "20180501";
-        final String toTmFc = "20180508";
+        final String toTmFc = "20180515";
         final int numOfRows = 1;
         final int pageNo = 1;
         final int pageSize = 1;
