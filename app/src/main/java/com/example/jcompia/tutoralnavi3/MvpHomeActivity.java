@@ -1,6 +1,5 @@
 package com.example.jcompia.tutoralnavi3;
 
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -11,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jcompia.tutoralnavi3.govweather.data.WetherSpcnwsInfoServiceVO;
 import com.example.jcompia.tutoralnavi3.mvp.weather.TaskPresenter;
 import com.example.jcompia.tutoralnavi3.mvp.weather.ViewPresenter;
 import com.example.jcompia.tutoralnavi3.mvp.weather.imp.ITaskContract;
@@ -23,11 +23,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Function;
 import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -35,23 +32,40 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class MvpHomeActivity extends MainActivity implements ITaskContract.View {
-    private static final String TAG = "HomeActivity";
+    private static final String TAG = "MvpHomeActivity";
 
     ITaskContract.Presenter mPresenter;
     TaskPresenter mTaskPresenter;
     ViewPresenter mViewPresenter;
     @BindView(R.id.resultText)
     TextView resultText;
-    @BindView(R.id.rxJavaTstBtn)
-    Button rxJavaTstBtn;
+
+    @BindView(R.id.rxAllTesttBtn)
+    Button rxAllTesttBtn1;
+
     @BindView(R.id.aSyncTestBtn)
 
     Button aSyncTestBtn;
     @BindView(R.id.settingMapBtn)
     Button settingMapBtn;
 
-    Observable obsable;
+    Observable wetherObservable;
+    Observable<String> obsable;
+    Observable<String> addMapBtnObsable;
+
     ConnectableObservable cobsable;
+
+    @BindView(R.id.rxAddMapTestBtn)
+    Button rxAddMapTestBtn;
+    @BindView(R.id.rxAddSubscriberTestBtn)
+    Button rxAddSubscriberTestBtn;
+    @BindView(R.id.otherResultText)
+    TextView otherResultText;
+    @BindView(R.id.rxChangePublishTestBtn)
+    Button rxChangePublishTestBtn;
+    @BindView(R.id.rxPublishTestBtn)
+    Button rxPublishTestBtn;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         Toast.makeText(MvpHomeActivity.this, "MvpHomeActivity!", Toast.LENGTH_SHORT).show();
@@ -86,50 +100,58 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
         mViewPresenter = new ViewPresenter(resultText);
         mTaskPresenter = new TaskPresenter(this);
 
-        obsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn));
-        obsable.debounce(1, TimeUnit.SECONDS);
+        wetherObservable = mTaskPresenter.getWeatherObsable();
+
+        obsable = serverCallBtnObservable((Button) findViewById(R.id.rxAllTesttBtn))
+                .map(event -> {
+                    return "rxAllTesttBtn1 Map left";
+                }); // 기존정의된 map 에 대하여 제정의 가능
 
 
+        obsable.subscribe(wheatehrFrontObserver());
 
-        obsable.subscribe(wheatehrObserver());
 
-         cobsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn)).publish();
-         cobsable.subscribe(otherObserver());
-         cobsable.connect();
+        cobsable = wetherObservable.publish();
+        cobsable.subscribeOn(Schedulers.io());
+
 
         Toast.makeText(MvpHomeActivity.this, "MvpHomeActivity!", Toast.LENGTH_SHORT).show();
     }
 
     /*서버통신관련한 버튼에 대한 공통정의 */
     private Observable serverCallBtnObservable(Button button) {
-        Observable observable = RxView.clicks(button)
-        .observeOn(AndroidSchedulers.mainThread())
-                // .throttleFirst(1, TimeUnit.SECONDS)
+        Observable<Object> observable = RxView.clicks(button)
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(event -> {
+                    return "All Button Map left";
+                });
+        // .throttleFirst(1, TimeUnit.SECONDS)
 
-                /*.map(data -> (
-                        Log.d("button Clicked", "button Clicked")
-                ))*/;
         return observable;
     }
 
-    private Observer wheatehrObserver() {
+    private Observer wheatehrFrontObserver() {
         Observer observer = new Observer() {
 
             @Override
             public void onSubscribe(Disposable d) {
-                Log.d(TAG, "onSubscribe");
+                Log.d(TAG, "wheatehrObserver onSubscribe");
             }
 
             @Override
             public void onNext(Object o) {
+                Log.d(TAG, "wheatehrObserver onSubscribe" + o.toString());
+
                 // rxjava + mvp 방식
-                mTaskPresenter.getWeatherObsable().subscribe(mViewPresenter.getWetherObserver());
+
+                wetherObservable.subscribe(mViewPresenter.getWetherObserver());
+                //wetherObservable.subscribe(otherObserver());
             }
 
 
             @Override
             public void onError(Throwable e) {
-                Log.d(TAG, "onError" + e.toString());
+                Log.d(TAG, "wheatehrObserver onError" + e.toString());
             }
 
             @Override
@@ -152,7 +174,12 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
             @Override
             public void onNext(Object o) {
                 Toast.makeText(MvpHomeActivity.this, "otherObserver!", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "otherObserver onNext");
+                Log.d(TAG, "otherObserver onNext" + o);
+                String rtnStr = ((WetherSpcnwsInfoServiceVO) o).getResponse().toString();
+                Toast.makeText(MvpHomeActivity.this, rtnStr, Toast.LENGTH_SHORT).show();
+
+                otherResultText.setText(rtnStr);
+
             }
 
 
@@ -171,35 +198,6 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
         return observer;
     }
 
-    private Observer otherObserver2() {
-        Observer observer = new Observer() {
-
-            @Override
-            public void onSubscribe(Disposable d) {
-                Log.d(TAG, "otherObserver2 onSubscribe");
-            }
-
-            @Override
-            public void onNext(Object o) {
-                Toast.makeText(MvpHomeActivity.this, "otherObserver!", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "otherObserver2 onNext");
-            }
-
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d(TAG, "otherObserver2" + e.toString());
-            }
-
-            @Override
-            public void onComplete() {
-                Log.d(TAG, "otherObserver2");
-            }
-
-        };
-        return observer;
-    }
-
 
     @Override
     public void showWeather(String weather) {
@@ -212,7 +210,7 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     }
 
     @OnClick(R.id.aSyncTestBtn)
-    public void onViewClicked() {
+    public void onASyncTestBtnClicked() {
 
         // retrofit2 + AsyncTask 방식
         resultText.setText(mTaskPresenter.getWeather()); //
@@ -220,29 +218,43 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
 
     @OnClick(R.id.settingMapBtn)
     public void settingMapBtnClicked() {
-        Log.d("settingMapBtnClicked","changed obsable add Map Operater");
-        //cobsable.distinct();
-        //cobsable.unsubscribeOn(Schedulers.newThread());
-        //cobsable.subscribeOn(Schedulers.newThread());
-        cobsable = serverCallBtnObservable((Button) findViewById(R.id.rxJavaTstBtn)).publish();
-        cobsable.subscribeOn(Schedulers.newThread());
-        cobsable.map(
-                data->( Log.d(TAG, "settingMapBtnClicked"))
-        );
-        cobsable.subscribeWith(otherObserver2());
-        //cobsable.publish();
-        //cobsable.connect();
+        Log.d("settingMapBtnClicked", "changed addMapBtnObsable add Map Operater");
+        addMapBtnObsable = serverCallBtnObservable((Button) findViewById(R.id.rxAddMapTestBtn))
+        .debounce(1, TimeUnit.SECONDS)
+                .map(event -> {
+                    return "rxAddMapTestBtn Map left";
+                }); // 기존정의된 map 에 대하여 제정의 가능
+        //obsable.debounce(1, TimeUnit.SECONDS);
+
+        addMapBtnObsable.subscribe(wheatehrFrontObserver());
 
     }
 
-    public void  showToast(){
+    public void showToast() {
         Toast.makeText(MvpHomeActivity.this, "added Map Oper", Toast.LENGTH_SHORT).show();
     }
 
+    @OnClick(R.id.rxAddSubscriberTestBtn)
+    public void onRxAddSubscriberTestBtnClicked() {
+        mTaskPresenter.getWeatherObsable().subscribe(otherObserver());
+    }
+
+    @OnClick(R.id.rxChangePublishTestBtn)
+    public void onRxChangePublishTestBtnClicked() {
+        cobsable.subscribeWith(otherObserver());
+    }
+
+    @OnClick(R.id.rxPublishTestBtn)
+    public void onRxPublishTestBtnClicked() {
+        cobsable.subscribeWith(wheatehrFrontObserver());
+        cobsable.connect();
+
+    }
 
 
 
-    /*@OnClick(R.id.rxJavaTstBtn)
+
+    /*@OnClick(R.id.rxAllTesttBtn1)
     public void onViewClicked() {
         Log.d(TAG, "onViewClicked");
     }*/

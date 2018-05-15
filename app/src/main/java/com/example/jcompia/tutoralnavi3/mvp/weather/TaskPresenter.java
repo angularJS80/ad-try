@@ -122,9 +122,11 @@ public class TaskPresenter implements ITaskContract.Presenter {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         APIRx api= retrofit.create(APIRx.class);
+
         Observable<WetherSpcnwsInfoServiceVO> observable = api.getWeatherInformation(getinput())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
+
         return observable;
     }
 

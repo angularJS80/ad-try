@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_gravity="center"
+        android:layout_gravity="top"
         android:orientation="vertical">
 
         <TextView
@@ -19,34 +19,66 @@
             android:textColor="#1a1a1a"
             android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/resultText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="resultText"
-            android:textColor="#1a1a1a"
-            android:textSize="20sp" />
-
-        <Button
-            android:id="@+id/rxJavaTstBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="rxJava 연타해도 1번콜" />
-
         <Button
             android:id="@+id/aSyncTestBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="aSyncTaskTest" />
+            android:text="aSyncTask 날씨가져오기" />
+
+        <Button
+            android:id="@+id/rxAllTesttBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="날씨가져오기 기본 rx + 공통Map" />
 
         <Button
             android:id="@+id/settingMapBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="add Map Oper" />
+            android:text="아래버튼에 Map 변경" />
+
+        <Button
+            android:id="@+id/rxAddMapTestBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="날씨가져오기 기본 rx + 버튼별Map" />
+
+        <Button
+            android:id="@+id/rxAddSubscriberTestBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="구독자 추가 추가즉시 발생요청 실행" />
+
+        <Button
+            android:id="@+id/rxChangePublishTestBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="발행옵저버블 Publish" />
+
+        <Button
+            android:id="@+id/rxPublishTestBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="날씨가져오기 기본 rx + Publish" />
 
 
+        <TextView
+            android:id="@+id/resultText"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:textColor="#f00"
+            android:textSize="25px"
+            android:textStyle="italic"
+            android:typeface="serif" />
+
+        <TextView
+            android:id="@+id/otherResultText"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:textColor="#f00"
+            android:textSize="25px"
+            android:textStyle="italic"
+            android:typeface="serif" />
     </LinearLayout>
 
 </ScrollView>
