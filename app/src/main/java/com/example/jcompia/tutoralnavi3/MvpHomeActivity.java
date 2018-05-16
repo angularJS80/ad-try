@@ -1,5 +1,6 @@
 package com.example.jcompia.tutoralnavi3;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -21,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import gun0912.tedbottompicker.TedBottomPicker;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -72,6 +74,8 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     Button rxPublishTestBtn;
     @BindView(R.id.rxIntervalPublishTestBtn)
     Button rxIntervalPublishTestBtn;
+    @BindView(R.id.imagePickerTestBtn)
+    Button imagePickerTestBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,8 +127,7 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
         Toast.makeText(MvpHomeActivity.this, "MvpHomeActivity!", Toast.LENGTH_SHORT).show();
 
 
-
-        publishSubject= PublishSubject.create();
+        publishSubject = PublishSubject.create();
         publishSubject.observeOn(AndroidSchedulers.mainThread());
         publishSubject.subscribeOn(AndroidSchedulers.mainThread());
 
@@ -310,6 +313,27 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     @OnClick(R.id.rxIntervalPublishTestBtn)
     public void onRxIntervalPublishTestBtnClicked() {
         publishSubject.subscribe(publishObserver());
+    }
+
+    @OnClick(R.id.imagePickerTestBtn)
+    public void onImagePickerTestBtnClicked() {
+
+        TedBottomPicker tedBottomPicker = new TedBottomPicker.Builder(MvpHomeActivity.this)
+                .setOnImageSelectedListener(new TedBottomPicker.OnImageSelectedListener() {
+                    @Override
+                    public void onImageSelected(Uri uri) {
+                        // here is selected uri
+                    }
+                })
+                .create();
+
+        tedBottomPicker.show(getSupportFragmentManager());
+
+
+
+
+
+
     }
 
 
