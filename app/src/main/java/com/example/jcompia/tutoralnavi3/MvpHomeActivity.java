@@ -56,8 +56,8 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     ConnectableObservable cobsable;
 
 
-    Observable<Long> cold= Observable.interval(1000, TimeUnit.MILLISECONDS);
-    PublishSubject<Long> publishSubject= PublishSubject.create();
+    Observable<Long> cold;
+    PublishSubject<Long> publishSubject;
 
 
     @BindView(R.id.rxAddMapTestBtn)
@@ -120,11 +120,17 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
 
         cobsable = wetherObservable.publish();
         cobsable.subscribeOn(Schedulers.io());
-
         Toast.makeText(MvpHomeActivity.this, "MvpHomeActivity!", Toast.LENGTH_SHORT).show();
 
+
+
+        publishSubject= PublishSubject.create();
         publishSubject.observeOn(AndroidSchedulers.mainThread());
-        publishSubject.subscribeOn(Schedulers.io());
+        publishSubject.subscribeOn(AndroidSchedulers.mainThread());
+
+        cold = Observable.interval(1000, TimeUnit.MILLISECONDS);
+        cold.observeOn(Schedulers.newThread());
+        cold.subscribeOn(AndroidSchedulers.mainThread());
         cold.subscribe(publishSubject);
 
 
@@ -221,8 +227,14 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
             @Override
             public void onNext(Object o) {
                 Log.d(TAG, "publishObserver onNext" + o);
+                Log.d(TAG, "Thread Name : " + Thread.currentThread().getName());
 
-                //Toast.makeText(MvpHomeActivity.this, o.toString(), Toast.LENGTH_SHORT).show();
+                //resultText.setText(o.toString());
+               /* MvpHomeActivity.this.runOnUiThread(new Runnable() {
+                    public void run() {*/
+
+                    /*}
+                });*/
 
 
             }
