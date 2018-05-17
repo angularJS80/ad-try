@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
+
     <application
         android:name=".kakao.GlobalApplication"
         android:allowBackup="true"

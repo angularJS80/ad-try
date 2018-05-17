@@ -16,6 +16,12 @@ import com.example.jcompia.tutoralnavi3.mvp.weather.TaskPresenter;
 import com.example.jcompia.tutoralnavi3.mvp.weather.ViewPresenter;
 import com.example.jcompia.tutoralnavi3.mvp.weather.imp.ITaskContract;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.util.concurrent.TimeUnit;
 
@@ -61,6 +67,7 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
     Observable<Long> cold;
     PublishSubject<Long> publishSubject;
 
+    PermissionListener permissionListener;
 
     @BindView(R.id.rxAddMapTestBtn)
     Button rxAddMapTestBtn;
@@ -135,8 +142,6 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
         cold.observeOn(Schedulers.newThread());
         cold.subscribeOn(AndroidSchedulers.mainThread());
         cold.subscribe(publishSubject);
-
-
     }
 
     /*서버통신관련한 버튼에 대한 공통정의 */
@@ -317,7 +322,36 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
 
     @OnClick(R.id.imagePickerTestBtn)
     public void onImagePickerTestBtnClicked() {
+        PermissionCheckImageSelect();
+    }
+    public void PermissionCheckImageSelect(){
+        Dexter.withActivity(MvpHomeActivity.this)
+                .withPermission("android.permission.WRITE_EXTERNAL_STORAGE")
+                .withListener(getPermissionListener())
+                .check();
 
+    }
+    public PermissionListener getPermissionListener() {
+        permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted(PermissionGrantedResponse response) {
+                ImageSelect();
+            }
+
+            @Override
+            public void onPermissionDenied(PermissionDeniedResponse response) {
+
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+            }
+        };
+        return permissionListener;
+    }
+
+    public void ImageSelect(){
         TedBottomPicker tedBottomPicker = new TedBottomPicker.Builder(MvpHomeActivity.this)
                 .setOnImageSelectedListener(new TedBottomPicker.OnImageSelectedListener() {
                     @Override
@@ -328,16 +362,7 @@ public class MvpHomeActivity extends MainActivity implements ITaskContract.View 
                 .create();
 
         tedBottomPicker.show(getSupportFragmentManager());
-
-
-
-
-
-
     }
-
-
-
 
     /*@OnClick(R.id.rxAllTesttBtn1)
     public void onViewClicked() {
