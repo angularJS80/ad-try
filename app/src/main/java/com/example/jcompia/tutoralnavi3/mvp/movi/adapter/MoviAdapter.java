@@ -6,33 +6,36 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.jcompia.tutoralnavi3.R;
-import com.example.jcompia.tutoralnavi3.mvp.movi.model.MoviModel;
 import com.example.jcompia.tutoralnavi3.mvp.movi.viewHolder.MoviViewHolder;
-import com.example.jcompia.tutoralnavi3.rest.adapter.CardAdapter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by yongbeom on 2018. 5. 12..
  */
 
-public class MoviAdapter extends RecyclerView.Adapter<MoviViewHolder>{
+public class MoviAdapter extends RecyclerView.Adapter<MoviViewHolder> {
     List<Map> moviList;
     Context viewContext;
-    public MoviAdapter(){
+
+    public MoviAdapter() {
         this.moviList = new ArrayList<Map>();
     }
 
-    public void setMoviList(List<Map> moviList){
+    public void setMoviList(List<Map> moviList) {
         this.moviList.clear();
         this.moviList = moviList;
         notifyDataSetChanged();
     }
+
     @Override
     public MoviViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -46,24 +49,19 @@ public class MoviAdapter extends RecyclerView.Adapter<MoviViewHolder>{
 
     @Override
     public void onBindViewHolder(MoviViewHolder holder, int position) {
+        Log.d("MoviAdapter", "onBindViewHolder");
+        Map map = moviList.get(position);
 
-        Log.d("MoviAdapter","onBindViewHolder");
-
-
-
-
-        Map map= moviList.get(position);
-
-        holder._id.setText( map.get("_id").toString());
-        holder.encodests.setText( map.get("filename").toString());
+        holder._id.setText(map.get("_id").toString());
+        holder.encodests.setText(map.get("filename").toString());
         holder.originalname.setText(map.get("originalname").toString());
-
-
 
     }
 
     @Override
     public int getItemCount() {
+
         return moviList.size();
     }
+
 }
