@@ -23,6 +23,8 @@ public class MoviViewHolder extends RecyclerView.ViewHolder {
     public TextView _id;
     @BindView(R.id.encodests)
     public TextView encodests;
+    @BindView(R.id.img)
+    public ImageView img;
 
     @BindView(R.id.download)
     Button download;
@@ -32,7 +34,7 @@ public class MoviViewHolder extends RecyclerView.ViewHolder {
         originalname = (TextView) itemView.findViewById(R.id.originalname);
         _id = (TextView) itemView.findViewById(R.id._id);
         encodests = (TextView) itemView.findViewById(R.id.encodests);
-
+        img = (ImageView) itemView.findViewById(R.id.img);
         /*
         @OnClick(R.id.download)
         public void onViewClicked() {

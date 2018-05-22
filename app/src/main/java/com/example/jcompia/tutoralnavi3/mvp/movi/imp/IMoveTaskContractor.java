@@ -18,7 +18,7 @@ public interface IMoveTaskContractor {
 
     interface View extends IBaseView<Pregenter>{
         void setMoviList();
-        void setLoginResult();
+        //void setLoginResult();
 
     }
 

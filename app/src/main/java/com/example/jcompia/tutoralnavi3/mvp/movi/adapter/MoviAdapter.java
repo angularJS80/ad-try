@@ -10,8 +10,11 @@ import android.widget.Button;
 
 import com.example.jcompia.tutoralnavi3.R;
 import com.example.jcompia.tutoralnavi3.mvp.movi.viewHolder.MoviViewHolder;
+import com.example.jcompia.tutoralnavi3.util.CustomTransformation;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,6 +59,16 @@ public class MoviAdapter extends RecyclerView.Adapter<MoviViewHolder> {
         holder.encodests.setText(map.get("filename").toString());
         holder.originalname.setText(map.get("originalname").toString());
 
+/*
+ thumnailUrlRoot+'/'+ fileitem.filepath + '.png'
+ */
+
+        Map optionMap = new HashMap();
+        optionMap.put("blur",false);
+        Picasso.with(this.viewContext)
+                .load("http://211.249.60.229:38080/api/"+map.get("filepath")+".png")
+                .transform(new CustomTransformation(this.viewContext, 25,optionMap))
+                .into(holder.img);
     }
 
     @Override

@@ -8,13 +8,20 @@ import android.content.pm.Signature;
 import android.util.Base64;
 import android.util.Log;
 
+import com.example.jcompia.tutoralnavi3.dagger.DaggerAppComponent;
 import com.facebook.FacebookSdk;
 import com.kakao.auth.KakaoSDK;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class GlobalApplication extends Application {
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasActivityInjector;
+
+public class GlobalApplication extends Application implements HasActivityInjector {
     private static GlobalApplication mInstance;
     private static volatile Activity currentActivity = null;
 
@@ -39,7 +46,11 @@ public class GlobalApplication extends Application {
 
     @Override
     public void onCreate() {
+
         super.onCreate();
+        // 인식 문제 있을땐 ReBuild
+
+        DaggerAppComponent.create().inject(this);
         mInstance = this;
         KakaoSDK.init(new KakaoSDKAdapter());
 
@@ -62,5 +73,14 @@ public class GlobalApplication extends Application {
 
         }
 
+    }
+
+    @Inject
+    DispatchingAndroidInjector<Activity> dispatchingActivityInjector;
+
+
+    @Override
+    public AndroidInjector<Activity> activityInjector() {
+        return dispatchingActivityInjector;
     }
 }

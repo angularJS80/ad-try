@@ -37,7 +37,7 @@ public class MoviModel {
         public Response intercept(Chain chain) throws IOException {
 
             Request newRequest  = chain.request().newBuilder()
-                    .addHeader("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTkyNTA4Y2NmNTkxZDRlN2MwMTE3OTkiLCJ1c2VybmFtZSI6IjEiLCJwYXNzd29yZCI6IjEiLCJfX3YiOjAsImlhdCI6MTUyNjE5MjE1MiwiZXhwIjoxNTI2MTkzNTkyfQ.5CicNWbIHsSr-8ga5o5D2P8z0Z5OonA_ynBjunbXAug" )
+                    .addHeader("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTkyNTA4Y2NmNTkxZDRlN2MwMTE3OTkiLCJ1c2VybmFtZSI6IjEiLCJwYXNzd29yZCI6IjEiLCJfX3YiOjAsImlhdCI6MTUyNjk5NjIyNywiZXhwIjoxNTI2OTk3NjY3fQ.dBzcC7bqlYYFsif7XhG2eRoZSPm6Z0o3SNaEr7jbc1c" )
                     .addHeader("Content-Type", "application/json")
 
                     .build();

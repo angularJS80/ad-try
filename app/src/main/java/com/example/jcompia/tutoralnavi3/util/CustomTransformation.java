@@ -6,14 +6,17 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
 import android.renderscript.RSRuntimeException;
+import android.util.Log;
 
 import com.squareup.picasso.Transformation;
+
+import java.util.Map;
 
 /**
  * Created by yongbeom on 2018. 5. 5..
  */
 
-public class BlurTransformation implements Transformation {
+public class CustomTransformation implements Transformation {
 
     private static int MAX_RADIUS = 25;
     private static int DEFAULT_DOWN_SAMPLING = 1;
@@ -22,16 +25,17 @@ public class BlurTransformation implements Transformation {
 
     private int mRadius;
     private int mSampling;
+    private Map mOption;
 
-    public BlurTransformation(Context context) {
-        this(context, MAX_RADIUS, DEFAULT_DOWN_SAMPLING);
+    public CustomTransformation(Context context,Map option) {
+        this(context, MAX_RADIUS, DEFAULT_DOWN_SAMPLING,option);
     }
 
-    public BlurTransformation(Context context, int radius) {
-        this(context, radius, DEFAULT_DOWN_SAMPLING);
+    public CustomTransformation(Context context, int radius,Map option) {
+        this(context, radius, DEFAULT_DOWN_SAMPLING,option);
     }
 
-    public BlurTransformation(Context context, int radius, int sampling) {
+    public CustomTransformation(Context context, int radius, int sampling,Map option) {
         mContext = context.getApplicationContext();
         mRadius = radius;
         if (mRadius > 25) {
@@ -40,11 +44,13 @@ public class BlurTransformation implements Transformation {
             mRadius = 1;
         }
         mSampling = sampling;
+        mOption = option;
     }
 
 
     @Override
     public Bitmap transform(Bitmap source) {
+        Log.d("CustomTransformation","transform");
         int scaledWidth = source.getWidth() / mSampling;
         int scaledHeight = source.getHeight() / mSampling;
 
@@ -56,15 +62,16 @@ public class BlurTransformation implements Transformation {
         paint.setFlags(Paint.FILTER_BITMAP_FLAG);
         canvas.drawBitmap(source, 0, 0, paint);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            try {
-                bitmap = RenderScriptBlur.blur(mContext, bitmap, mRadius);
-            } catch (RSRuntimeException e) {
+        if("true".equals(mOption.get("blur"))){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                try {
+                    bitmap = RenderScriptBlur.blur(mContext, bitmap, mRadius);
+                } catch (RSRuntimeException e) {
 
+                }
             }
-        } else {
-
         }
+
         source.recycle();
         return bitmap;
     }

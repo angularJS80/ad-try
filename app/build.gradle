@@ -63,5 +63,13 @@ dependencies {
     // imagePicker
     compile 'gun0912.ted:tedbottompicker:1.1.0'
     implementation 'com.karumi:dexter:4.2.0'
+
+//dagger2
+    def daggerVer = 2.12 // or latest version
+
+    implementation "com.google.dagger:dagger:$daggerVer"
+    implementation "com.google.dagger:dagger-android-support:$daggerVer"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVer"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVer"
 }
 apply plugin: 'com.google.gms.google-services'

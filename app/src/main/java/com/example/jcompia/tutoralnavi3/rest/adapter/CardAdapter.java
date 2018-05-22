@@ -13,12 +13,13 @@ import android.widget.TextView;
 
 import com.example.jcompia.tutoralnavi3.R;
 import com.example.jcompia.tutoralnavi3.fragment.ImageLoaderTask;
-import com.example.jcompia.tutoralnavi3.util.BlurTransformation;
+import com.example.jcompia.tutoralnavi3.util.CustomTransformation;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,9 +81,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         viewHolder.blog.setText("blog: " + map.get("name").toString());
         //Picasso.with(viewGroupContext).load("http://www.fnordware.com/superpng/pnggrad8rgb.png").resize(120, 60).into(viewHolder.img);
 
+        Map optionMap = new HashMap();
+        optionMap.put("blur",false);
         Picasso.with(this.viewGroupContext)
                 .load("http://www.fnordware.com/superpng/pnggrad8rgb.png")
-                .transform(new BlurTransformation(this.viewGroupContext, 25))
+                .transform(new CustomTransformation(this.viewGroupContext, 25,optionMap))
                 .into(viewHolder.img);
 
     }

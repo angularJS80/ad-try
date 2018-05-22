@@ -1,5 +1,6 @@
 package com.example.jcompia.tutoralnavi3.mvp.movi.pregenter;
 
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.example.jcompia.tutoralnavi3.govweather.APIRx;
@@ -31,12 +32,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MovePregenter implements IMoveTaskContractor.Pregenter {
     private Gson GSON = new Gson();
-    final MoviModel moviModel = new MoviModel();
+    MoviModel moviModel = new MoviModel();
     MoviAdapter moviAdapter;
-
+/*
     public MovePregenter(MoviAdapter moviAdapter){
         this.moviAdapter = moviAdapter;
-    }
+    }*/
 
     @Override
     public void start() {
@@ -90,9 +91,9 @@ public class MovePregenter implements IMoveTaskContractor.Pregenter {
     }
 
 
-    public Map<String, String> getinput(){
+    public Map<String, String> getinput() {
         /*날씨 전송데이터값 시작 */
-        final String serviceKey= "hOoqoTjEflU73a4GVB%2FWraajQopg6BxoSZQ6Ie6OMIBG%2FaUoktc7ep2jDZhsJVFHI62DzbqG7pnPbdPauLuM7g%3D%3D";
+        final String serviceKey = "hOoqoTjEflU73a4GVB%2FWraajQopg6BxoSZQ6Ie6OMIBG%2FaUoktc7ep2jDZhsJVFHI62DzbqG7pnPbdPauLuM7g%3D%3D";
         final String fromTmFc = "20180501";
         final String toTmFc = "20180508";
         final int numOfRows = 1;
@@ -100,20 +101,29 @@ public class MovePregenter implements IMoveTaskContractor.Pregenter {
         final int pageSize = 1;
         final int startPage = 1;
         final String stnId = "108";
-        final String _type ="json";
+        final String _type = "json";
 
         Map<String, String> map = new HashMap<>();
         map.put("serviceKey", serviceKey);
         map.put("fromTmFc", fromTmFc);
         map.put("toTmFc", toTmFc);
-        map.put("numOfRows", numOfRows+"");
-        map.put("pageSize", pageSize+"");
-        map.put("pageNo", pageNo+"");
-        map.put("startPage", startPage+"");
+        map.put("numOfRows", numOfRows + "");
+        map.put("pageSize", pageSize + "");
+        map.put("pageNo", pageNo + "");
+        map.put("startPage", startPage + "");
         map.put("stnId", stnId);
         map.put("_type", _type);
         /*날씨 전송데이터값 종료 */
         return map;
+    }
+
+
+    public RecyclerView.Adapter getMoviAdapter() {
+        return this.moviAdapter;
+    }
+
+    public void setMoviAdapter( RecyclerView.Adapter moviAdapter ) {
+         this.moviAdapter = (MoviAdapter)moviAdapter;
     }
 
 }
