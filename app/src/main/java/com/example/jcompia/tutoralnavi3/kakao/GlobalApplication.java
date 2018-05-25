@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.example.jcompia.tutoralnavi3.dagger.DaggerAppComponent;
 import com.facebook.FacebookSdk;
+import com.facebook.stetho.Stetho;
 import com.kakao.auth.KakaoSDK;
 
 import java.security.MessageDigest;
@@ -50,12 +51,14 @@ public class GlobalApplication extends Application implements HasActivityInjecto
         super.onCreate();
         // 인식 문제 있을땐 ReBuild
 
+        // 데거 컴포넌트에 현재 어플리케이션을 주입시킨다
         DaggerAppComponent.create().inject(this);
+
+        //크롬 디버깅을 사용하도록 초기화
+        Stetho.initializeWithDefaults(this);
+
         mInstance = this;
         KakaoSDK.init(new KakaoSDKAdapter());
-
-
-
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         try {

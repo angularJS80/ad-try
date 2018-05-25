@@ -38,12 +38,14 @@
         android:id="@+id/loginPw"
         android:layout_width="115dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="PW"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="140dp" />
+        app:layout_constraintEnd_toStartOf="@+id/loginBtn"
+        app:layout_constraintStart_toEndOf="@+id/loginId"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/loginBtn"

@@ -1,5 +1,6 @@
 package com.example.jcompia.tutoralnavi3.mvp.movi.pregenter;
 
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
@@ -34,6 +35,8 @@ public class MovePregenter implements IMoveTaskContractor.Pregenter {
     private Gson GSON = new Gson();
     MoviModel moviModel = new MoviModel();
     MoviAdapter moviAdapter;
+    private SharedPreferences appData;
+    Gson gson = new Gson();
 /*
     public MovePregenter(MoviAdapter moviAdapter){
         this.moviAdapter = moviAdapter;
@@ -54,6 +57,8 @@ public class MovePregenter implements IMoveTaskContractor.Pregenter {
                 return o;
             }
         };
+
+
         observable
                 .map(function)
                 .subscribe(getMoviListObserver());
@@ -91,28 +96,67 @@ public class MovePregenter implements IMoveTaskContractor.Pregenter {
     }
 
 
+    public void postLogin(Map map) {
+        Observable observable = moviModel.postLogin(map);
+        Function function = new Function() {
+            @Override
+            public Object apply(Object o) throws Exception {
+                Log.d("map",o.toString());
+                return o;
+            }
+        };
+
+
+        observable
+                .map(function)
+                .subscribe(postLoginObserver());
+    }
+
+
+
+
+    public Observer postLoginObserver(){
+        Observer moviListObserver = new Observer<Object>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                Log.d("moviListObserver", "onSubscribe : "+d.toString() );
+            }
+
+            @Override
+            public void onNext(Object obj) {
+                Log.e("moviListObserver", "onNext : ");
+                appData.edit().putString("movi-user-info",gson.toJson(obj).toString());
+                appData.edit().apply();
+                getMovieList(new HashMap());
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                Log.e("moviListObserver", "onError : "+e.toString() );
+            }
+
+            @Override
+            public void onComplete() {
+                Log.e("moviListObserver", "onComplete : ");
+            }
+        };
+        return moviListObserver;
+    }
+
+
+
+
+
+
+
+
     public Map<String, String> getinput() {
-        /*날씨 전송데이터값 시작 */
-        final String serviceKey = "hOoqoTjEflU73a4GVB%2FWraajQopg6BxoSZQ6Ie6OMIBG%2FaUoktc7ep2jDZhsJVFHI62DzbqG7pnPbdPauLuM7g%3D%3D";
-        final String fromTmFc = "20180501";
-        final String toTmFc = "20180508";
-        final int numOfRows = 1;
-        final int pageNo = 1;
-        final int pageSize = 1;
-        final int startPage = 1;
-        final String stnId = "108";
-        final String _type = "json";
+
 
         Map<String, String> map = new HashMap<>();
-        map.put("serviceKey", serviceKey);
-        map.put("fromTmFc", fromTmFc);
-        map.put("toTmFc", toTmFc);
-        map.put("numOfRows", numOfRows + "");
-        map.put("pageSize", pageSize + "");
-        map.put("pageNo", pageNo + "");
-        map.put("startPage", startPage + "");
-        map.put("stnId", stnId);
-        map.put("_type", _type);
+
         /*날씨 전송데이터값 종료 */
         return map;
     }

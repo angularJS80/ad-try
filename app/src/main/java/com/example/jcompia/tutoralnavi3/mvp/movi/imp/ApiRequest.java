@@ -17,6 +17,7 @@ public interface ApiRequest {
     @POST("/api/fileList")
     Observable<List<Map>> getMoviList(@Body Map param);
 
-    @POST("/authcate")
+
+    @POST("/openapi/authenticate")
     Observable<Map> postLogin(@Body Map map);
 }

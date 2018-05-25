@@ -96,7 +96,10 @@ public class MoviActivity extends MainActivity implements IMoveTaskContractor.Vi
 
     @OnClick(R.id.loginBtn)
     public void onViewClicked() {
-        Map paramMap = new HashMap();
-        movePregenter.getMovieList(paramMap);
+        Map<String, String> paramMap = new HashMap<>();
+        paramMap.put("username",loginId.getText().toString());
+        paramMap.put("password",loginPw.getText().toString());
+        movePregenter.postLogin(paramMap);
+        //movePregenter.getMovieList(paramMap);
     }
 }

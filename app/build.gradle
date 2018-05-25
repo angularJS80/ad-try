@@ -71,5 +71,8 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$daggerVer"
     annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVer"
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVer"
+
+    compile 'com.facebook.stetho:stetho:1.4.2' // 네트워크 호출 인터셉트 후 디버깅 하고 싶다면 network helper 도 추가
+    compile 'com.facebook.stetho:stetho-okhttp3:1.4.2'
 }
 apply plugin: 'com.google.gms.google-services'
