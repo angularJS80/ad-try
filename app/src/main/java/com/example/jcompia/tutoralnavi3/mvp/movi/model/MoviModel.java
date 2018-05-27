@@ -33,7 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MoviModel {
     final String baseURL ="http://211.249.60.229:38080/api/";
-    private SharedPreferences appData;
+    private SharedPreferences appData ;
     Gson gson = new Gson();
 
 
@@ -41,14 +41,18 @@ public class MoviModel {
             .addInterceptor(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
-                    Map appDataMap = appData.getAll();
+                    Map appDataMap = new HashMap();
+                    String moviUserInfo = "";
+                    Map moviUserMap = new HashMap();
+                    if(appData!=null){
 
-                String moviUserInfo = appData.getString("movi-user-info","");
+                         moviUserInfo = appData.getString("movi-user-info","");
+                         moviUserMap = gson.fromJson(moviUserInfo, HashMap.class);
+                    }
 
-                    Map map = gson.fromJson(moviUserInfo, HashMap.class);
-
-                    String token = (String) map.get("token");
-                    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTkyNTA4Y2NmNTkxZDRlN2MwMTE3OTkiLCJ1c2VybmFtZSI6IjEiLCJwYXNzd29yZCI6IjEiLCJfX3YiOjAsImlhdCI6MTUyNzIwNTA5NSwiZXhwIjoxNTI3MjA2NTM1fQ.CeE_asZL2Jx-fXlBQYt-KUFe5wkf3FYnb1E9_-KLZaA";
+                    String token = (String) moviUserMap.get("token");
+                    {"error":false,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTkyNTA4Y2NmNTkxZDRlN2MwMTE3OTkiLCJ1c2VybmFtZSI6IjEiLCJwYXNzd29yZCI6IjEiLCJfX3YiOjAsImlhdCI6MTUyNzM4MjgwMywiZXhwIjoxNTI3Mzg0MjQzfQ.zqQHqcge0QQPaLeNwsk_Csf-9QN5IEhLxuwelQooFZQ"}
+                    token="";
 
 
                     Request newRequest  = chain.request().newBuilder()

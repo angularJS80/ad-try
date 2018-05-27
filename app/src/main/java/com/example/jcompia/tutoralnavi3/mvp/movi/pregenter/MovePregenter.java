@@ -62,6 +62,8 @@ public class MovePregenter implements IMoveTaskContractor.Pregenter {
         observable
                 .map(function)
                 .subscribe(getMoviListObserver());
+
+
     }
 
 
@@ -125,8 +127,8 @@ public class MovePregenter implements IMoveTaskContractor.Pregenter {
             @Override
             public void onNext(Object obj) {
                 Log.e("moviListObserver", "onNext : ");
-                appData.edit().putString("movi-user-info",gson.toJson(obj).toString());
-                appData.edit().apply();
+               // appData.edit().putString("movi-user-info",gson.toJson(obj).toString());
+                //appData.edit().apply();
                 getMovieList(new HashMap());
 
             }

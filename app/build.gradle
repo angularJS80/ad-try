@@ -66,11 +66,19 @@ dependencies {
 
 //dagger2
     def daggerVer = 2.12 // or latest version
-
+    // 데거 코어 라이브러리
     implementation "com.google.dagger:dagger:$daggerVer"
+    // 데거 서포트 라이브러리
     implementation "com.google.dagger:dagger-android-support:$daggerVer"
+
+
+    //데거 코어 관련 컴파일 지정 프로세서
     annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVer"
+
+    //데거 의존성 관련 컴파일 지정 프로세서
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVer"
+
+
 
     compile 'com.facebook.stetho:stetho:1.4.2' // 네트워크 호출 인터셉트 후 디버깅 하고 싶다면 network helper 도 추가
     compile 'com.facebook.stetho:stetho-okhttp3:1.4.2'
