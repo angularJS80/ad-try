@@ -1,6 +1,8 @@
 package com.example.jcompia.tutoralnavi3;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,10 +52,22 @@ public class MoviActivity extends MainActivity implements IMoveTaskContractor.Vi
     @BindView(R.id.moviList)
     RecyclerView moviList;
 
+    SharedPreferences sharedPref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Toast.makeText(MoviActivity.this, "MoviActivity!",     Toast.LENGTH_SHORT).show();
+        sharedPref = getPreferences(Context.MODE_PRIVATE);
+
+        SharedPreferences settings = getSharedPreferences("moviToken", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("logged", "logged");
+        editor.commit();
+
+        String token = settings.getString("logged", "").toString();
+
+
+
+        Toast.makeText(MoviActivity.this, "MoviActivity!"+token,     Toast.LENGTH_SHORT).show();
         AndroidInjection.inject(MoviActivity.this);// 엑티비티 주입
         super.onCreate(savedInstanceState);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
@@ -62,7 +76,6 @@ public class MoviActivity extends MainActivity implements IMoveTaskContractor.Vi
         navigationView.getMenu().getItem(1).setChecked(true);
 
         ButterKnife.bind(this);
-
         init();
 
 

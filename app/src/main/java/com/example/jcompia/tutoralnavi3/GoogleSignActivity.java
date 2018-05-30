@@ -40,6 +40,8 @@ public class GoogleSignActivity extends MainActivity  implements
         Toast.makeText(GoogleSignActivity.this, "GoogleSignActivity!",     Toast.LENGTH_SHORT).show();
         super.onCreate(savedInstanceState);
         setViewResource();
+
+        //메인엑티비티에에서 구글 클라이언트를 가져온다.
         mGoogleApiClient = super.getGoogleApiClient();
         //mGoogleApiClient.connect();
         Toast.makeText(GoogleSignActivity.this, "isConnected" +mGoogleApiClient.isConnected(),     Toast.LENGTH_SHORT).show();
@@ -49,6 +51,7 @@ public class GoogleSignActivity extends MainActivity  implements
     }
 
     public void setViewResource(){
+
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_google_sign, contentFrameLayout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
@@ -64,38 +67,7 @@ public class GoogleSignActivity extends MainActivity  implements
         Button signInButton = (Button) findViewById(R.id.sign_in_button);
     }
 
-    public void googleConnection(){
 
-        // [START configure_signin]
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        // [END configure_signin]
-
-        // [START build_client]
-        // Build a GoogleApiClient with access to the Google Sign-In API and the
-        // options specified by gso.
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        // [END build_client]
-
-        // [START customize_button]
-        // Customize sign-in button. The sign-in button can be displayed in
-        // multiple sizes and color schemes. It can also be contextually
-        // rendered based on the requested scopes. For example. a red button may
-        // be displayed when Google+ scopes are requested, but a white button
-        // may be displayed when only basic profile is requested. Try adding the
-        // Scopes.PLUS_LOGIN scope to the GoogleSignInOptions to see the
-        // difference.
-
-        // signInButton.setSize(SignInButton.SIZE_STANDARD);
-        // signInButton.setScopes(gso.getScopeArray());
-        // [END customize_button]
-    }
 
 
     // [START onActivityResult]
@@ -210,7 +182,6 @@ public class GoogleSignActivity extends MainActivity  implements
                 signIn();
                 break;
             case R.id.sign_out_button:
-                //GoogleApplication.getInstance().signOut();
                 signOut();
                 break;
             case R.id.disconnect_button:

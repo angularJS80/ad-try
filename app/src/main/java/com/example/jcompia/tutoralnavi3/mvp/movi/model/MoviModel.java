@@ -1,12 +1,14 @@
 package com.example.jcompia.tutoralnavi3.mvp.movi.model;
 
 import android.app.TaskStackBuilder;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.renderscript.RenderScript;
 
 import com.example.jcompia.tutoralnavi3.govweather.APIRx;
 import com.example.jcompia.tutoralnavi3.govweather.data.WetherSpcnwsInfoServiceVO;
 import com.example.jcompia.tutoralnavi3.mvp.movi.imp.ApiRequest;
+import com.facebook.login.Login;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
 
@@ -34,6 +36,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MoviModel {
     final String baseURL ="http://211.249.60.229:38080/api/";
     private SharedPreferences appData ;
+    public static final String PREFS_NAME = "LoginPrefs";
+
     Gson gson = new Gson();
 
 
@@ -50,9 +54,8 @@ public class MoviModel {
                          moviUserMap = gson.fromJson(moviUserInfo, HashMap.class);
                     }
 
-                    String token = (String) moviUserMap.get("token");
-                    {"error":false,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTkyNTA4Y2NmNTkxZDRlN2MwMTE3OTkiLCJ1c2VybmFtZSI6IjEiLCJwYXNzd29yZCI6IjEiLCJfX3YiOjAsImlhdCI6MTUyNzM4MjgwMywiZXhwIjoxNTI3Mzg0MjQzfQ.zqQHqcge0QQPaLeNwsk_Csf-9QN5IEhLxuwelQooFZQ"}
-                    token="";
+
+                   String token="";
 
 
                     Request newRequest  = chain.request().newBuilder()
