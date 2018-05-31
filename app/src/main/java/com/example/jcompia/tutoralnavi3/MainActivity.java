@@ -118,10 +118,10 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.navi_firebasesavedata:
                         Toast.makeText(MainActivity.this, "GoogleSignActivity.acct"+GoogleApplication.getInstance().getGoogleSignAccount(),     Toast.LENGTH_SHORT).show();
-                        if(acct!=null){
+                        if(GoogleApplication.getInstance().getGoogleSignAccount()!=null){
                             FireBaseTester fireBaseTester = new FireBaseTester(MainActivity.this);
                             fireBaseTester.setMsg("onMenu FireBase Clicked!");
-                            fireBaseTester .firebaseAuthWithGoogle(GoogleApplication.getInstance().getGoogleSignAccount());
+                            fireBaseTester .firebaseAuthWithGoogle();
                         }
                     case R.id.navi_todoList: startActivity(new Intent(getApplicationContext(), TodoActivity.class));
                         return true;
@@ -231,17 +231,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void signOut() {
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        // [START_EXCLUDE]
-                        //updateUI(false);
-                        // [END_EXCLUDE]
-                    }
-                });
-    }
 
     public GoogleApiClient getGoogleApiClient(){
         return this.mGoogleApiClient;

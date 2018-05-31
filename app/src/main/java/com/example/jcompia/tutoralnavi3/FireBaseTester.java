@@ -31,9 +31,9 @@ public class FireBaseTester {
         mContext = context;
     }
 
-    public void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    public void firebaseAuthWithGoogle() {
 
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        AuthCredential credential = GoogleAuthProvider.getCredential(GoogleApplication.getInstance().getGoogleSignAccount().getIdToken(), null);
         mAuth = FirebaseAuth.getInstance();
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener((Activity) mContext, new OnCompleteListener<AuthResult>() {

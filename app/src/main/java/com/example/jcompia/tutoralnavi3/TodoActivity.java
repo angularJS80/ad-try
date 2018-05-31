@@ -114,7 +114,7 @@ public class TodoActivity extends MainActivity{
                             FireBaseTester fireBaseTester = new FireBaseTester(TodoActivity.this);
                             fireBaseTester.setMsg(todoTaskInput);
                             ///fireBaseTester .firebaseAuthWithGoogle(TodoActivity.super.getGoogleSignInAccount());
-                            fireBaseTester .firebaseAuthWithGoogle(GoogleApplication.getInstance().getGoogleSignAccount());
+                            fireBaseTester .firebaseAuthWithGoogle();
 
 
                         }
