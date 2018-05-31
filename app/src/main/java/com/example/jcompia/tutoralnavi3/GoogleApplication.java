@@ -87,7 +87,7 @@ public class GoogleApplication extends Application{
         return mGoogleApiClient;
     }
 
-    public void onStart() {
+    public void silentSignIn() {
 
 
         opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
@@ -128,21 +128,6 @@ public class GoogleApplication extends Application{
         } else {
             // Signed out, show unauthenticated UI.
             //updateUI(false);
-        }
-    }
-
-    private void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(mContext);
-            mProgressDialog.setMessage(mContext.getString(R.string.loading));
-            mProgressDialog.setIndeterminate(true);
-        }
-        //mProgressDialog.show();
-    }
-
-    private void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            //mProgressDialog.hide();
         }
     }
 

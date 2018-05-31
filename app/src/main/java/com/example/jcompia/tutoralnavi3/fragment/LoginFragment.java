@@ -19,8 +19,8 @@ import com.example.jcompia.tutoralnavi3.FragmentActivity;
 import com.example.jcompia.tutoralnavi3.MainActivity;
 import com.example.jcompia.tutoralnavi3.R;
 import com.example.jcompia.tutoralnavi3.rest.adapter.CardAdapter;
-import com.example.jcompia.tutoralnavi3.rest.service.GithubService;
 import com.example.jcompia.tutoralnavi3.rest.service.ServiceFactory;
+import com.example.jcompia.tutoralnavi3.rest.service.StsApiService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -107,8 +107,6 @@ public class LoginFragment extends Fragment {
         }
         Account finalAccount = account;
 
-        GithubService service = ServiceFactory.createRetrofitService(GithubService.class, GithubService.SERVICE_ENDPOINT, MainActivity.mContext,finalAccount); // Url 이 설정되어있고 호출할수있는 메소드가 정의된 서비를 정의한다.
-
 
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +115,8 @@ public class LoginFragment extends Fragment {
                 parameters.put("username",idText.getText().toString());
                 parameters.put("password",passwordText.getText().toString());
                 //Github github = new Github();
-                service.authenticateUser(parameters) // 서비스의 결과는 옵저버를을 반환 함으로 이후의 처리는 옵저버블형태이다.
+                StsApiService stsApiservice = ServiceFactory.createRetrofitService(StsApiService.class, StsApiService.SERVICE_ENDPOINT, MainActivity.mContext,finalAccount); // Url 이 설정되어있고 호출할수있는 메소드가 정의된 서비를 정의한다.
+                stsApiservice.authenticateUser(parameters) // 서비스의 결과는 옵저버를을 반환 함으로 이후의 처리는 옵저버블형태이다.
                 .subscribeOn(Schedulers.newThread())
 
                 .observeOn(AndroidSchedulers.mainThread())
@@ -150,38 +149,6 @@ public class LoginFragment extends Fragment {
             }
 
         });
-/*
-
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                for(String login : Data.githubList) {
-                    service.getHeroList()
-                            .subscribeOn(Schedulers.newThread())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Observer<Github>() {
-                                @Override
-                                public void onSubscribe(Disposable d) {}
-
-                                @Override
-                                public void onNext(Github github) {
-                                    mCardAdapter.addData(github);
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-                                    Log.e("GithubDemo", e.getMessage());
-                                }
-
-                                @Override
-                                public void onComplete() {}
-
-                            });
-                }
-            }
-
-        });
-*/
-
 
         return rootView;
 

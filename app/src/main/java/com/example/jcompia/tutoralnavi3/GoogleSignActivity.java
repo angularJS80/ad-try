@@ -43,7 +43,7 @@ public class GoogleSignActivity extends MainActivity  implements
 
         //메인엑티비티에에서 구글 클라이언트를 가져온다.
         mGoogleApiClient = super.getGoogleApiClient();
-        //mGoogleApiClient.connect();
+
         Toast.makeText(GoogleSignActivity.this, "isConnected" +mGoogleApiClient.isConnected(),     Toast.LENGTH_SHORT).show();
 
         //googleConnection();
@@ -92,6 +92,15 @@ public class GoogleSignActivity extends MainActivity  implements
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             Toast.makeText(GoogleSignActivity.this, "handleSignInResult getEmail:" + acct.getEmail()+"getAccount:" + acct.getAccount(),     Toast.LENGTH_SHORT).show();
+
+
+            // 오류가 나면 또 여기를 보겠지 ? 밑에 키스토어 생성은 기본적으로 해두고
+
+            //$keymake sample keytool -genkey -v -keystore tutu1234.keystore -alias tutu1234 -keyalg RSA -keysize 2048 -validity 18250
+
+
+            //디버그 키스토어의 sha1 결과를 firebase 콘솔에 접근하여 톱니바퀴를 루른다음 지문추가 해야 한다
+            //keytool -list -v -keystore ~/.android/debug.eystore -alias androiddebugkey -storepass android -keypass android
 
            // mStatusTextView.setText(acct.getDisplayName());
             updateUI(true);

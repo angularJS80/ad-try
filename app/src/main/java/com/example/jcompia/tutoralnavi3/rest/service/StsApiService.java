@@ -9,7 +9,7 @@ import retrofit2.http.POST;
 
 
 
-public interface GithubService {
+public interface StsApiService {
     String SERVICE_ENDPOINT = "http://211.249.60.229:58080/hero/";
 
     @POST("api/authenticate")
