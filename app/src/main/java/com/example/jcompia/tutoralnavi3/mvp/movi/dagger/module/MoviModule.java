@@ -25,4 +25,6 @@ public class MoviModule {
     MoviAdapter provideMoviAdapter() {
         return new MoviAdapter();
     }
+
+
 }

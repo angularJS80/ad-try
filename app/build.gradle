@@ -78,7 +78,8 @@ dependencies {
     //데거 의존성 관련 컴파일 지정 프로세서
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVer"
 
-
+    //커스텀 토스트 라이브러리
+    implementation 'com.muddzdev:styleabletoast:2.1.2'
 
     compile 'com.facebook.stetho:stetho:1.4.2' // 네트워크 호출 인터셉트 후 디버깅 하고 싶다면 network helper 도 추가
     compile 'com.facebook.stetho:stetho-okhttp3:1.4.2'

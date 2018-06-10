@@ -1,10 +1,14 @@
 package com.example.jcompia.tutoralnavi3.mvp.movi.model;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.renderscript.RenderScript;
+import android.util.Log;
 
+import com.example.jcompia.tutoralnavi3.fragment.GenericAccountService;
 import com.example.jcompia.tutoralnavi3.govweather.APIRx;
 import com.example.jcompia.tutoralnavi3.govweather.data.WetherSpcnwsInfoServiceVO;
 import com.example.jcompia.tutoralnavi3.mvp.movi.imp.ApiRequest;
@@ -37,7 +41,7 @@ public class MoviModel {
     final String baseURL ="http://211.249.60.229:38080/api/";
     private SharedPreferences appData ;
     public static final String PREFS_NAME = "LoginPrefs";
-
+    AccountManager accountManager;
     Gson gson = new Gson();
 
 
@@ -48,15 +52,15 @@ public class MoviModel {
                     Map appDataMap = new HashMap();
                     String moviUserInfo = "";
                     Map moviUserMap = new HashMap();
+
                     if(appData!=null){
 
                          moviUserInfo = appData.getString("movi-user-info","");
                          moviUserMap = gson.fromJson(moviUserInfo, HashMap.class);
                     }
 
-
-                   String token="";
-
+                    String token="";
+                    token = getToken();
 
                     Request newRequest  = chain.request().newBuilder()
                             .addHeader("Authorization", token )
@@ -106,4 +110,36 @@ public class MoviModel {
 
     }
 
+    public void setAccountManager(AccountManager accountManager) {
+        this.accountManager = accountManager;
+    }
+
+    public String getToken(){
+        Account account ;
+        account = GenericAccountService.GetAccount();
+        Account[] accounts = accountManager.getAccountsByType("com.example.jcompia.tutoralnavi3.AccountType");
+        Log.e("Loginfragment accounts", ""+accounts.length);
+        if(accounts.length>0){
+            account = accounts[0];
+        }
+        String authToken = accountManager.peekAuthToken(account,"full_access");
+        if(authToken==null ){
+            authToken="";
+        }
+        return authToken;
+    }
+
+    public void saveToken(String token){
+        Account account ;
+        account = GenericAccountService.GetAccount();
+        Account[] accounts = accountManager.getAccountsByType("com.example.jcompia.tutoralnavi3.AccountType");
+        Log.e("Loginfragment accounts", ""+accounts.length);
+        if(accounts.length>0){
+            account = accounts[0];
+        }
+
+        accountManager.addAccountExplicitly(account, null, null);
+        accountManager.setAuthToken(account,"full_access",token);
+
+    }
 }

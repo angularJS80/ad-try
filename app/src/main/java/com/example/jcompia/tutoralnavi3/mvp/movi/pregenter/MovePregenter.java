@@ -1,9 +1,13 @@
 package com.example.jcompia.tutoralnavi3.mvp.movi.pregenter;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.example.jcompia.tutoralnavi3.fragment.GenericAccountService;
 import com.example.jcompia.tutoralnavi3.govweather.APIRx;
 import com.example.jcompia.tutoralnavi3.govweather.data.WetherSpcnwsInfoServiceVO;
 import com.example.jcompia.tutoralnavi3.mvp.movi.adapter.MoviAdapter;
@@ -35,8 +39,11 @@ public class MovePregenter implements IMoveTaskContractor.Pregenter {
     private Gson GSON = new Gson();
     MoviModel moviModel = new MoviModel();
     MoviAdapter moviAdapter;
+    AccountManager accountManager;
     private SharedPreferences appData;
     Gson gson = new Gson();
+
+
 /*
     public MovePregenter(MoviAdapter moviAdapter){
         this.moviAdapter = moviAdapter;
@@ -49,6 +56,7 @@ public class MovePregenter implements IMoveTaskContractor.Pregenter {
 
     @Override
     public void getMovieList(Map map) {
+
         Observable observable = moviModel.getMoviList(getinput());
         Function function = new Function() {
             @Override
@@ -99,6 +107,7 @@ public class MovePregenter implements IMoveTaskContractor.Pregenter {
 
 
     public void postLogin(Map map) {
+
         Observable observable = moviModel.postLogin(map);
         Function function = new Function() {
             @Override
@@ -118,17 +127,18 @@ public class MovePregenter implements IMoveTaskContractor.Pregenter {
 
 
     public Observer postLoginObserver(){
-        Observer moviListObserver = new Observer<Object>() {
+        Observer moviListObserver = new Observer<Map>() {
             @Override
             public void onSubscribe(Disposable d) {
                 Log.d("moviListObserver", "onSubscribe : "+d.toString() );
             }
 
             @Override
-            public void onNext(Object obj) {
+            public void onNext(Map map) {
                 Log.e("moviListObserver", "onNext : ");
                // appData.edit().putString("movi-user-info",gson.toJson(obj).toString());
                 //appData.edit().apply();
+                saveToken(map.get("token").toString());
                 getMovieList(new HashMap());
 
             }
@@ -171,5 +181,16 @@ public class MovePregenter implements IMoveTaskContractor.Pregenter {
     public void setMoviAdapter( RecyclerView.Adapter moviAdapter ) {
          this.moviAdapter = (MoviAdapter)moviAdapter;
     }
+
+    public void setAccountManager(AccountManager accountManager) {
+        this.accountManager = accountManager;
+        moviModel.setAccountManager(accountManager);
+    }
+
+    public void saveToken(String token){
+        moviModel.saveToken(token);
+
+    }
+
 
 }
