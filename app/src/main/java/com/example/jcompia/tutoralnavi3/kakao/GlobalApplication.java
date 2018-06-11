@@ -2,13 +2,16 @@ package com.example.jcompia.tutoralnavi3.kakao;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.util.Base64;
 import android.util.Log;
 
-import com.example.jcompia.tutoralnavi3.dagger.DaggerAppComponent;
+import com.example.jcompia.tutoralnavi3.di.component.ApplicationComponent;
+import com.example.jcompia.tutoralnavi3.di.component.DaggerApplicationComponent;
+import com.example.jcompia.tutoralnavi3.di.module.ApplicationModule;
 import com.facebook.FacebookSdk;
 import com.facebook.stetho.Stetho;
 import com.kakao.auth.KakaoSDK;
@@ -18,14 +21,30 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
 
-public class GlobalApplication extends Application implements HasActivityInjector {
+public class GlobalApplication extends Application {
     private static GlobalApplication mInstance;
     private static volatile Activity currentActivity = null;
+    private ApplicationComponent component;
 
+
+    private void setupGraph() {
+        component = DaggerApplicationComponent
+                .builder()
+                .applicationModule(new ApplicationModule(this))
+                .build();
+        component.inject(this);
+    }
+
+    public ApplicationComponent getComponent(){
+        return component;
+    }
+
+
+
+    public ApplicationComponent component() {
+        return component;
+    }
     public static Activity getCurrentActivity() {
         Log.d("TAG", "++ currentActivity : " + (currentActivity != null ? currentActivity.getClass().getSimpleName() : ""));
         return currentActivity;
@@ -45,14 +64,17 @@ public class GlobalApplication extends Application implements HasActivityInjecto
         return mInstance;
     }
 
+    public static GlobalApplication get(Context context) {
+        return (GlobalApplication) context.getApplicationContext();
+    }
+
+
     @Override
     public void onCreate() {
 
         super.onCreate();
         // 인식 문제 있을땐 ReBuild
-
-        // 데거 컴포넌트에 현재 어플리케이션을 주입시킨다
-        DaggerAppComponent.create().inject(this);
+        setupGraph();
 
         //크롬 디버깅을 사용하도록 초기화
         Stetho.initializeWithDefaults(this);
@@ -78,12 +100,4 @@ public class GlobalApplication extends Application implements HasActivityInjecto
 
     }
 
-    @Inject
-    DispatchingAndroidInjector<Activity> dispatchingActivityInjector;
-
-
-    @Override
-    public AndroidInjector<Activity> activityInjector() {
-        return dispatchingActivityInjector;
-    }
 }

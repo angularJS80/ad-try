@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -36,6 +38,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class MovePregenter implements IMoveTaskContractor.Pregenter {
+    @Inject
+    public MovePregenter(){
+
+    }
     private Gson GSON = new Gson();
     MoviModel moviModel = new MoviModel();
     MoviAdapter moviAdapter;

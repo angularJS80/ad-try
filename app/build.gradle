@@ -64,19 +64,8 @@ dependencies {
     compile 'gun0912.ted:tedbottompicker:1.1.0'
     implementation 'com.karumi:dexter:4.2.0'
 
-//dagger2
-    def daggerVer = 2.12 // or latest version
-    // 데거 코어 라이브러리
-    implementation "com.google.dagger:dagger:$daggerVer"
-    // 데거 서포트 라이브러리
-    implementation "com.google.dagger:dagger-android-support:$daggerVer"
-
-
-    //데거 코어 관련 컴파일 지정 프로세서
-    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVer"
-
-    //데거 의존성 관련 컴파일 지정 프로세서
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVer"
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.15'
+    implementation 'com.google.dagger:dagger:2.15'
 
     //커스텀 토스트 라이브러리
     implementation 'com.muddzdev:styleabletoast:2.1.2'

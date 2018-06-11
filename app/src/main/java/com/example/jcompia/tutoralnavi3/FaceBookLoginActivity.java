@@ -21,9 +21,7 @@ import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONObject;
 
-import dagger.android.support.DaggerAppCompatActivity;
-
-public class FaceBookLoginActivity extends DaggerAppCompatActivity {
+public class FaceBookLoginActivity extends Activity {
     private CallbackManager callbackManager;
     private LoginButton loginButton;
     private TextView btnLogin;

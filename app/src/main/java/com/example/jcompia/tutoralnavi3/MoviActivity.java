@@ -1,8 +1,6 @@
 package com.example.jcompia.tutoralnavi3;
 
-import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -10,13 +8,16 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import com.example.jcompia.tutoralnavi3.fragment.GenericAccountService;
+import com.example.jcompia.tutoralnavi3.data.AccountManagerHelper;
+import com.example.jcompia.tutoralnavi3.data.SharedPrefsHelper;
+import com.example.jcompia.tutoralnavi3.di.component.ActivityComponent;
+import com.example.jcompia.tutoralnavi3.di.component.DaggerActivityComponent;
+import com.example.jcompia.tutoralnavi3.di.module.ActivityModule;
+import com.example.jcompia.tutoralnavi3.kakao.GlobalApplication;
 import com.example.jcompia.tutoralnavi3.mvp.movi.adapter.MoviAdapter;
 import com.example.jcompia.tutoralnavi3.mvp.movi.imp.IMoveTaskContractor;
 import com.example.jcompia.tutoralnavi3.mvp.movi.pregenter.MovePregenter;
@@ -30,21 +31,17 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
 
 public class MoviActivity extends MainActivity implements IMoveTaskContractor.View {
-
-    @Inject
-    DispatchingAndroidInjector<Activity> activityDispatchingAndroidInjector;
 
    /* @Inject
     IMoveTaskContractor.Pregenter presenter;*/
     @Inject
-    MovePregenter movePregenter;
+    SharedPrefsHelper sharedPrefsHelper;
+
     @Inject
+    MovePregenter movePregenter;
+    //@Inject
     MoviAdapter moviAdapter;
     //private IMoveTaskContractor.Pregenter movePregenter;
 
@@ -58,9 +55,24 @@ public class MoviActivity extends MainActivity implements IMoveTaskContractor.Vi
     @BindView(R.id.moviList)
     RecyclerView moviList;
 
+    //@Inject
     SharedPreferences sharedPref;
-    AccountManager accountManager;
+    @Inject
+    AccountManagerHelper accountManager;
+    ActivityComponent activityComponent;
 
+
+    public ActivityComponent getActivityComponent() {
+        if (activityComponent == null) {
+
+            activityComponent = DaggerActivityComponent.builder()
+                    .activityModule(new ActivityModule(this))
+                    .applicationComponent(GlobalApplication.get(this).getComponent())
+                    .build();
+
+        }
+        return activityComponent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +100,9 @@ public class MoviActivity extends MainActivity implements IMoveTaskContractor.Vi
         //Toast.makeText(MoviActivity.this, "MoviActivity!"+token,     Toast.LENGTH_SHORT).show();
 
 
-        AndroidInjection.inject(MoviActivity.this);// 엑티비티 주입
+       // AndroidInjection.inject(MoviActivity.this);// 엑티비티 주입
         super.onCreate(savedInstanceState);
+        getActivityComponent().inject(this);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_movi, contentFrameLayout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
@@ -102,12 +115,12 @@ public class MoviActivity extends MainActivity implements IMoveTaskContractor.Vi
     }
 
     public void init(){
-        accountManager = (AccountManager) this.getSystemService(Context.ACCOUNT_SERVICE);
+        //accountManager = (AccountManager) this.getSystemService(Context.ACCOUNT_SERVICE);
 
         moviAdapter = new MoviAdapter();
         //movePregenter = new MovePregenter(moviAdapter);
         movePregenter.setMoviAdapter(moviAdapter);
-        movePregenter.setAccountManager(accountManager);
+        movePregenter.setAccountManager(accountManager.getmAccountManager());
         moviList.setLayoutManager(new LinearLayoutManager(this));
         moviList.setHasFixedSize(true);
         moviList.setAdapter(moviAdapter);

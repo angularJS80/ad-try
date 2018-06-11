@@ -2,6 +2,7 @@ package com.example.jcompia.tutoralnavi3.mvp.movi.model;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Application;
 import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +21,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
@@ -41,9 +44,10 @@ public class MoviModel {
     final String baseURL ="http://211.249.60.229:38080/api/";
     private SharedPreferences appData ;
     public static final String PREFS_NAME = "LoginPrefs";
-    AccountManager accountManager;
     Gson gson = new Gson();
 
+    @Inject
+    AccountManager accountManager;
 
     OkHttpClient client = new OkHttpClient.Builder()
             .addInterceptor(new Interceptor() {
