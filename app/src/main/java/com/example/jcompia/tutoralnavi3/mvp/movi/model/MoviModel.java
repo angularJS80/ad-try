@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.renderscript.RenderScript;
 import android.util.Log;
 
+import com.example.jcompia.tutoralnavi3.data.AccountManagerHelper;
 import com.example.jcompia.tutoralnavi3.fragment.GenericAccountService;
 import com.example.jcompia.tutoralnavi3.govweather.APIRx;
 import com.example.jcompia.tutoralnavi3.govweather.data.WetherSpcnwsInfoServiceVO;
@@ -41,12 +42,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class MoviModel {
+
+    @Inject
+    public MoviModel(){
+
+    }
+
     final String baseURL ="http://211.249.60.229:38080/api/";
     private SharedPreferences appData ;
     public static final String PREFS_NAME = "LoginPrefs";
     Gson gson = new Gson();
-
     @Inject
+    AccountManagerHelper accountManagerHelper;
+
     AccountManager accountManager;
 
     OkHttpClient client = new OkHttpClient.Builder()
@@ -119,6 +127,7 @@ public class MoviModel {
     }
 
     public String getToken(){
+        accountManager= accountManagerHelper.getmAccountManager();
         Account account ;
         account = GenericAccountService.GetAccount();
         Account[] accounts = accountManager.getAccountsByType("com.example.jcompia.tutoralnavi3.AccountType");

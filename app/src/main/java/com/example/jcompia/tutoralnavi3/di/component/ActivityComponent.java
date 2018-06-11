@@ -3,6 +3,7 @@ package com.example.jcompia.tutoralnavi3.di.component;
 import com.example.jcompia.tutoralnavi3.MoviActivity;
 import com.example.jcompia.tutoralnavi3.di.PerActivity;
 import com.example.jcompia.tutoralnavi3.di.module.ActivityModule;
+import com.example.jcompia.tutoralnavi3.mvp.movi.model.MoviModel;
 
 import dagger.Component;
 
@@ -11,9 +12,8 @@ import dagger.Component;
  */
 
 @PerActivity
-@Component(dependencies = ApplicationComponent.class, modules = ActivityModule.class)
+@Component(dependencies = ApplicationComponent.class, modules = {ActivityModule.class})
 public interface ActivityComponent {
-
     void inject(MoviActivity moviActivity);
-
+    void inject(MoviModel moviModel);
 }

@@ -9,6 +9,7 @@ import com.example.jcompia.tutoralnavi3.data.SharedPrefsHelper;
 import com.example.jcompia.tutoralnavi3.di.ApplicationContext;
 import com.example.jcompia.tutoralnavi3.di.module.ApplicationModule;
 import com.example.jcompia.tutoralnavi3.kakao.GlobalApplication;
+import com.example.jcompia.tutoralnavi3.mvp.movi.pregenter.MovePregenter;
 
 import javax.inject.Singleton;
 
@@ -33,5 +34,6 @@ public interface ApplicationComponent {
 
     AccountManagerHelper getAccountManagerHelper();
     SharedPrefsHelper getPreferenceHelper();
+    MovePregenter getMovePregenter();
 
 }

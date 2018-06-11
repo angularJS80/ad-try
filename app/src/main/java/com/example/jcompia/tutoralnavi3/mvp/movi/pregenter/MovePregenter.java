@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -36,16 +37,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by yongbeom on 2018. 5. 12..
  */
-
+@Singleton
 public class MovePregenter implements IMoveTaskContractor.Pregenter {
     @Inject
     public MovePregenter(){
 
     }
     private Gson GSON = new Gson();
-    MoviModel moviModel = new MoviModel();
+    @Inject
+    MoviModel moviModel ;//= new MoviModel();
     MoviAdapter moviAdapter;
-    AccountManager accountManager;
+   // AccountManager accountManager;
     private SharedPreferences appData;
     Gson gson = new Gson();
 
@@ -189,8 +191,8 @@ public class MovePregenter implements IMoveTaskContractor.Pregenter {
     }
 
     public void setAccountManager(AccountManager accountManager) {
-        this.accountManager = accountManager;
-        moviModel.setAccountManager(accountManager);
+        //this.accountManager = accountManager;
+       // moviModel.setAccountManager(accountManager);
     }
 
     public void saveToken(String token){

@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.example.jcompia.tutoralnavi3.R;
 import com.example.jcompia.tutoralnavi3.mvp.movi.viewHolder.MoviViewHolder;
 import com.example.jcompia.tutoralnavi3.util.CustomTransformation;
+import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import butterknife.OnClick;
 public class MoviAdapter extends RecyclerView.Adapter<MoviViewHolder> {
     List<Map> moviList;
     Context viewContext;
+    Picasso picasso;
 
     public MoviAdapter() {
         this.moviList = new ArrayList<Map>();
@@ -46,6 +48,11 @@ public class MoviAdapter extends RecyclerView.Adapter<MoviViewHolder> {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.movi_item, parent, false);
         MoviViewHolder viewHolder = new MoviViewHolder(v);
+
+        picasso = new  Picasso.Builder(viewContext)
+                .memoryCache(new LruCache(24000))
+                .build();
+
         return viewHolder;
 
     }
@@ -65,10 +72,11 @@ public class MoviAdapter extends RecyclerView.Adapter<MoviViewHolder> {
 
         Map optionMap = new HashMap();
         optionMap.put("blur",false);
-        Picasso.with(this.viewContext)
+        picasso.with(this.viewContext)
                 .load("http://211.249.60.229:38080/api/"+map.get("filepath")+".png")
                 .transform(new CustomTransformation(this.viewContext, 25,optionMap))
                 .into(holder.img);
+
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.content.Context;
 
 
 import com.example.jcompia.tutoralnavi3.di.ActivityContext;
+import com.example.jcompia.tutoralnavi3.mvp.movi.model.MoviModel;
 
 import dagger.Module;
 import dagger.Provides;
@@ -33,4 +34,5 @@ public class ActivityModule {
     Activity provideActivity() {
         return mActivity;
     }
+
 }

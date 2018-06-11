@@ -20,6 +20,7 @@ import com.example.jcompia.tutoralnavi3.di.module.ActivityModule;
 import com.example.jcompia.tutoralnavi3.kakao.GlobalApplication;
 import com.example.jcompia.tutoralnavi3.mvp.movi.adapter.MoviAdapter;
 import com.example.jcompia.tutoralnavi3.mvp.movi.imp.IMoveTaskContractor;
+import com.example.jcompia.tutoralnavi3.mvp.movi.model.MoviModel;
 import com.example.jcompia.tutoralnavi3.mvp.movi.pregenter.MovePregenter;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
 
@@ -57,8 +58,7 @@ public class MoviActivity extends MainActivity implements IMoveTaskContractor.Vi
 
     //@Inject
     SharedPreferences sharedPref;
-    @Inject
-    AccountManagerHelper accountManager;
+
     ActivityComponent activityComponent;
 
 
@@ -67,6 +67,7 @@ public class MoviActivity extends MainActivity implements IMoveTaskContractor.Vi
 
             activityComponent = DaggerActivityComponent.builder()
                     .activityModule(new ActivityModule(this))
+                    //.modelModule(new ModelModule(new MoviModel()))
                     .applicationComponent(GlobalApplication.get(this).getComponent())
                     .build();
 
@@ -120,7 +121,7 @@ public class MoviActivity extends MainActivity implements IMoveTaskContractor.Vi
         moviAdapter = new MoviAdapter();
         //movePregenter = new MovePregenter(moviAdapter);
         movePregenter.setMoviAdapter(moviAdapter);
-        movePregenter.setAccountManager(accountManager.getmAccountManager());
+       // movePregenter.setAccountManager(accountManager.getmAccountManager());
         moviList.setLayoutManager(new LinearLayoutManager(this));
         moviList.setHasFixedSize(true);
         moviList.setAdapter(moviAdapter);
