@@ -23,35 +23,31 @@ import com.google.android.gms.common.api.Status;
 
 
 
-public class GoogleSignActivity extends MainActivity  implements
-        GoogleApiClient.OnConnectionFailedListener,
-        View.OnClickListener {
+public class GoogleSignActivity extends MainActivity {
     public static Context mContext;
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
     //private TextView mStatusTextView;
     private ProgressDialog mProgressDialog;
-
+    View.OnClickListener signInButtonOnClickListener;
+    View.OnClickListener signOutButtonOnClickListener;
+    View.OnClickListener disconnectButtonOnClickListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         mContext = this;
         Toast.makeText(GoogleSignActivity.this, "GoogleSignActivity!",     Toast.LENGTH_SHORT).show();
         super.onCreate(savedInstanceState);
-        setViewResource();
+        defineView();
 
         //메인엑티비티에에서 구글 클라이언트를 가져온다.
-        mGoogleApiClient = super.getGoogleApiClient();
+        mGoogleApiClient = GoogleApplication.getInstance().getGoogleApiClient();//super.getGoogleApiClient();
 
-        Toast.makeText(GoogleSignActivity.this, "isConnected" +mGoogleApiClient.isConnected(),     Toast.LENGTH_SHORT).show();
-
-        //googleConnection();
 
     }
 
-    public void setViewResource(){
-
+    public void defineView(){
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_google_sign, contentFrameLayout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
@@ -59,15 +55,44 @@ public class GoogleSignActivity extends MainActivity  implements
 
         // Views
         // mStatusTextView = (TextView) findViewById(R.id.status);
+        createBtnListener();
+        defineBtnListener();
 
-        // Button listeners
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.sign_out_button).setOnClickListener(this);
-        findViewById(R.id.disconnect_button).setOnClickListener(this);
-        Button signInButton = (Button) findViewById(R.id.sign_in_button);
+
     }
 
+    private void createBtnListener() {
+        signInButtonOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signIn();
 
+            }
+        };
+
+        signOutButtonOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signOut();
+
+            }
+        };
+
+        disconnectButtonOnClickListener= new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                revokeAccess();
+            }
+        };
+
+    }
+
+    private void defineBtnListener() {
+        // Button listeners
+        findViewById(R.id.sign_in_button).setOnClickListener(signInButtonOnClickListener);
+        findViewById(R.id.sign_out_button).setOnClickListener(signOutButtonOnClickListener);
+        findViewById(R.id.disconnect_button).setOnClickListener(disconnectButtonOnClickListener);
+    }
 
 
     // [START onActivityResult]
@@ -113,8 +138,7 @@ public class GoogleSignActivity extends MainActivity  implements
 
     // [START signIn]
     public void signIn() {
-        Toast.makeText(GoogleSignActivity.this, "signIn!",     Toast.LENGTH_SHORT).show();
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     // [END signIn]
@@ -147,30 +171,23 @@ public class GoogleSignActivity extends MainActivity  implements
     }
     // [END revokeAccess]
 
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
-        Toast.makeText(GoogleSignActivity.this, "onConnectionFailed!"+ connectionResult,     Toast.LENGTH_SHORT).show();
-
-    }
-
-
     public void showProgressDialog() {
-
-        if (mProgressDialog == null) {
+        super.showProgressDialog(mContext);
+        /*if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setIndeterminate(true);
         }
 
-        mProgressDialog.show();
+        mProgressDialog.show();*/
     }
 
     public void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+
+        super.hideProgressDialog();
+        /*if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.hide();
-        }
+        }*/
     }
 
     private void updateUI(boolean signedIn) {
@@ -185,20 +202,6 @@ public class GoogleSignActivity extends MainActivity  implements
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.sign_in_button:
-                signIn();
-                break;
-            case R.id.sign_out_button:
-                signOut();
-                break;
-            case R.id.disconnect_button:
-                revokeAccess();
-                break;
-        }
-    }
 
     @Override
     public void onStart() {

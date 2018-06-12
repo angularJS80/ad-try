@@ -3,7 +3,9 @@ package com.example.jcompia.tutoralnavi3;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -57,12 +59,29 @@ public class GoogleApplication extends Application{
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
         mGoogleApiClient = new GoogleApiClient.Builder(mContext)
-                .enableAutoManage(new FragmentActivity(), new GoogleApiClient.OnConnectionFailedListener() {
+                /*.enableAutoManage(new FragmentActivity(), new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
                         // connection failed, should be handled
 
                         Log.d(TAG, "#######################onConnectionFailed:" + connectionResult);
+                        Toast.makeText(mContext, "onConnectionFailed!"+ connectionResult,     Toast.LENGTH_SHORT).show();
+                    }
+                })*/
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(@Nullable Bundle bundle) {
+                        Toast.makeText(mContext, "onConnected!",     Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onConnectionSuspended(int i) {
+
+                    }
+                })
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
                         Toast.makeText(mContext, "onConnectionFailed!"+ connectionResult,     Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -96,7 +115,7 @@ public class GoogleApplication extends Application{
         if (opr.isDone()) {
             // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
             // and the GoogleSignInResult will be available instantly.
-            //Toast.makeText(mContext, "Got cached sign-in",     Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.mContext, "Got cached sign-in",     Toast.LENGTH_SHORT).show();
 
             GoogleSignInResult result = opr.get();
             handleSignInResult(result);
@@ -104,7 +123,7 @@ public class GoogleApplication extends Application{
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
             // single sign-on will occur in this branch.
-            ((MainActivity)MainActivity.mContext).showProgressDialog();
+            ((MainActivity)MainActivity.mContext).showProgressDialog(MainActivity.mContext);
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
@@ -121,7 +140,7 @@ public class GoogleApplication extends Application{
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             acct = result.getSignInAccount();
-            //Toast.makeText(mContext, "handleSignInResult getEmail:" + acct.getEmail()+"getAccount:" + acct.getAccount()+"getIdToken:" + acct.getIdToken(),     Toast.LENGTH_SHORT).show();
+            Toast.makeText(MoviActivity.mContext, "handleSignInResult getEmail:" + acct.getEmail()+"getAccount:" + acct.getAccount()+"getIdToken:" + acct.getIdToken(),     Toast.LENGTH_SHORT).show();
 
             // mStatusTextView.setText(acct.getDisplayName());
             //updateUI(true);

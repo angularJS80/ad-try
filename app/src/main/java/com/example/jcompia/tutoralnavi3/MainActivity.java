@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public static Context mContext;
     private ProgressDialog mProgressDialog;
     public static GoogleSignInAccount acct;
-    private GoogleApiClient mGoogleApiClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +56,11 @@ public class MainActivity extends AppCompatActivity {
         // 구글Api 초기화
         GoogleApplication.getInstance().initialize(this);
 
-        //구글접속 가능한 클라이언트
-        mGoogleApiClient = GoogleApplication.getInstance().GoogleConnection();
-
         //구글클라이언트로 구글에 연결
-        mGoogleApiClient.connect(); // 컨넥션을 수동으로 해줘야??
+        GoogleApplication.getInstance().GoogleConnection().connect(); // 컨넥션을 수동으로 해줘야??
 
         //구글 연결인스턴스를 구글Api 에 주입
-        GoogleApplication.getInstance().setGoogleApiClient(mGoogleApiClient );
+        //GoogleApplication.getInstance().setGoogleApiClient(mGoogleApiClient );
 
         //자동로그인 처리
         GoogleApplication.getInstance().silentSignIn();
@@ -200,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
     protected void overridePendingTransitionExit() {
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
-
+/*
     public void handleSignInResult(GoogleSignInResult result) {
         Toast.makeText(mContext, "handleSignInResult:" + result.isSuccess(),     Toast.LENGTH_SHORT).show();
         if (result.isSuccess()) {
@@ -214,11 +211,11 @@ public class MainActivity extends AppCompatActivity {
             // Signed out, show unauthenticated UI.
             //updateUI(false);
         }
-    }
+    }*/
 
-    public void showProgressDialog() {
+    public void showProgressDialog(Context context) {
         if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog = new ProgressDialog(context);
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setIndeterminate(true);
         }
@@ -232,9 +229,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public GoogleApiClient getGoogleApiClient(){
+    /*public GoogleApiClient getGoogleApiClient(){
         return this.mGoogleApiClient;
-    }
+    }*/
 
 
 }
