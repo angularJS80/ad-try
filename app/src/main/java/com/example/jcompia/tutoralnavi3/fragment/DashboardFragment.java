@@ -46,7 +46,7 @@ public class DashboardFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private CardAdapter mCardAdapter;
     private OnFragmentInteractionListener mListener;
     private static final String TAG = "LoginFragment";
     private Context mContext;
@@ -98,7 +98,7 @@ public class DashboardFragment extends Fragment {
         RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        final CardAdapter mCardAdapter = new CardAdapter();
+        mCardAdapter = new CardAdapter();
         mRecyclerView.setAdapter(mCardAdapter);
 
 
@@ -110,9 +110,17 @@ public class DashboardFragment extends Fragment {
         // 어카운트가 없을경우 로그인 프래그먼트로 이동
         if(accounts.length>0){
             account = accounts[0];
+            getHeroList(account);
         }else{
             ((FragmentActivity)getActivity()).switchFragment(new LoginFragment());
         }
+
+        // Inflate the layout for this fragment
+
+        return rootView;
+    }
+
+    public void getHeroList( Account account){
 
         StsApiService service = ServiceFactory.createRetrofitService(StsApiService.class, StsApiService.SERVICE_ENDPOINT, MainActivity.mContext,account); // Url 이 설정되어있고 호출할수있는 메소드가 정의된 서비를 정의한다.
         Map<String,String> parameters = new HashMap<>();
@@ -157,11 +165,6 @@ public class DashboardFragment extends Fragment {
                     public void onComplete() {}
 
                 });
-
-
-        // Inflate the layout for this fragment
-
-        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
