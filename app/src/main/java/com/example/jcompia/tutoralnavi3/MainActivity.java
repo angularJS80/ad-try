@@ -113,13 +113,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), GoogleSignActivity.class));
                         return true;
 
-                    case R.id.navi_firebasesavedata:
-                        Toast.makeText(MainActivity.this, "GoogleSignActivity.acct"+GoogleApplication.getInstance().getGoogleSignAccount(),     Toast.LENGTH_SHORT).show();
-                        if(GoogleApplication.getInstance().getGoogleSignAccount()!=null){
-                            FireBaseTester fireBaseTester = new FireBaseTester(MainActivity.this);
-                            fireBaseTester.setMsg("onMenu FireBase Clicked!");
-                            fireBaseTester .firebaseAuthWithGoogle();
-                        }
+
                     case R.id.navi_todoList: startActivity(new Intent(getApplicationContext(), TodoActivity.class));
                         return true;
 

@@ -7,7 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -18,10 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jcompia.tutoralnavi3.adapter.MyCustomAdapter;
+import com.example.jcompia.tutoralnavi3.adapter.MyHashMapAdapter;
 import com.example.jcompia.tutoralnavi3.listener.SwipeDismissListViewTouchListener;
 import com.example.jcompia.tutoralnavi3.sqlHelper.TodoListSQLHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class TodoActivity extends MainActivity{
@@ -30,7 +34,10 @@ public class TodoActivity extends MainActivity{
     private ListView myList;
     private ListAdapter todoListAdapter;
     private TodoListSQLHelper todoListSQLHelper;
-
+    FireBaseModel fireBaseModel;
+    MyHashMapAdapter arrayAdapter ;
+    ArrayList<HashMap> arrayList = new ArrayList<HashMap>();
+    boolean useFireBase = true;
 
     private CharSequence mTitle;
 
@@ -43,12 +50,18 @@ public class TodoActivity extends MainActivity{
         getLayoutInflater().inflate(R.layout.activity_todo, contentFrameLayout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
         navigationView.getMenu().getItem(1).setChecked(true);
-
         myList = (ListView) findViewById(R.id.list);
-     ImageButton fabImageButton = (ImageButton) findViewById(R.id.fab_image_button);
 
-
-        mTitle = getTitle();
+        if(useFireBase){
+            fireBaseModel = new FireBaseModel(TodoActivity.this);
+            //fireBaseModel .firebaseAuthWithGoogle();
+            fireBaseModel.firebaseNoneAuth();
+            arrayAdapter = new MyHashMapAdapter(this,arrayList);
+            fireBaseModel.setListListener(arrayAdapter);
+            myList.setAdapter(arrayAdapter);
+        }
+        ImageButton fabImageButton = (ImageButton) findViewById(R.id.fab_image_button);
+         mTitle = getTitle();
 
         // Set up the drawer.
 
@@ -68,13 +81,20 @@ public class TodoActivity extends MainActivity{
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
+                                    if(useFireBase){
+                                        String key = ((HashMap)arrayAdapter.getItem(position)).get("key").toString();
+                                        fireBaseModel.removeItem(key);
+                                        arrayAdapter.removeIndex(position);
+                                    }else{
+                                        String deleteTodoItemSql = "DELETE FROM " + TodoListSQLHelper.TABLE_NAME +
+                                                " WHERE " + TodoListSQLHelper._ID+ " = '" + todoListAdapter.getItemId(position) + "'";
 
-                                    String deleteTodoItemSql = "DELETE FROM " + TodoListSQLHelper.TABLE_NAME +
-                                            " WHERE " + TodoListSQLHelper._ID+ " = '" + todoListAdapter.getItemId(position) + "'";
+                                        todoListSQLHelper = new TodoListSQLHelper(TodoActivity.this);
+                                        SQLiteDatabase sqlDB = todoListSQLHelper.getWritableDatabase();
+                                        sqlDB.execSQL(deleteTodoItemSql);
+                                    }
 
-                                    todoListSQLHelper = new TodoListSQLHelper(TodoActivity.this);
-                                    SQLiteDatabase sqlDB = todoListSQLHelper.getWritableDatabase();
-                                    sqlDB.execSQL(deleteTodoItemSql);
+
                                     updateTodoList();
 
                                 }
@@ -110,13 +130,9 @@ public class TodoActivity extends MainActivity{
                         sqLiteDatabase.insertWithOnConflict(TodoListSQLHelper.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 
                         //if(TodoActivity.super.getGoogleSignInAccount()!=null){
-                        if(GoogleApplication.getInstance().getGoogleSignAccount()!=null){
-                            FireBaseTester fireBaseTester = new FireBaseTester(TodoActivity.this);
-                            fireBaseTester.setMsg(todoTaskInput);
+                        if(useFireBase){
+                            fireBaseModel.saveData(todoTaskInput);
                             ///fireBaseTester .firebaseAuthWithGoogle(TodoActivity.super.getGoogleSignInAccount());
-                            fireBaseTester .firebaseAuthWithGoogle();
-
-
                         }
 
                         //update the Todo task list UI
@@ -139,25 +155,27 @@ public class TodoActivity extends MainActivity{
 
 
     private void updateTodoList() {
-        todoListSQLHelper = new TodoListSQLHelper(TodoActivity.this);
-        SQLiteDatabase sqLiteDatabase = todoListSQLHelper.getReadableDatabase();
+        if(!useFireBase){
+            todoListSQLHelper = new TodoListSQLHelper(TodoActivity.this);
+            SQLiteDatabase sqLiteDatabase = todoListSQLHelper.getReadableDatabase();
 
-        //cursor to read todo task list from database
-        Cursor cursor = sqLiteDatabase.query(TodoListSQLHelper.TABLE_NAME,
-                new String[]{TodoListSQLHelper._ID, TodoListSQLHelper.COL1_TASK},
-                null, null, null, null, null);
+            //cursor to read todo task list from database
+            Cursor cursor = sqLiteDatabase.query(TodoListSQLHelper.TABLE_NAME,
+                    new String[]{TodoListSQLHelper._ID, TodoListSQLHelper.COL1_TASK},
+                    null, null, null, null, null);
 
-        //binds the todo task list with the UI
-        todoListAdapter = new SimpleCursorAdapter(
-                this,
-                R.layout.due,
-                cursor,
-                new String[]{TodoListSQLHelper.COL1_TASK},
-                new int[]{R.id.due_text_view},
-                0
-        );
+            //binds the todo task list with the UI
 
-        myList.setAdapter(todoListAdapter);
+            todoListAdapter = new SimpleCursorAdapter(
+                    this,
+                    R.layout.due,
+                    cursor,
+                    new String[]{TodoListSQLHelper.COL1_TASK},
+                    new int[]{R.id.due_text_view},
+                    0
+            );
+            myList.setAdapter(todoListAdapter);
+        }
     }
 
     //closing the todo task item
