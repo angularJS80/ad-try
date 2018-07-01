@@ -90,10 +90,17 @@ public class FaceBookLoginActivity extends Activity {
                     AccessToken currentAccessToken) {
                 Log.d("test","test");
                 Profile profile = Profile.getCurrentProfile();
-                Log.d("test",profile.getName());
+                if(profile!=null){
 
-                PrefUtils.setCurrentUser(user,FaceBookLoginActivity.this);
+                    Log.d("test",profile.getName());
 
+                    user = new User();
+                    user.facebookID = profile.getId();
+                    user.name = profile.getName();
+                    PrefUtils.clearCurrentUser(FaceBookLoginActivity.this);
+                    PrefUtils.setCurrentUser(user,FaceBookLoginActivity.this);
+
+                }
 
                 // Set the access token using
                 // currentAccessToken when it's loaded or set.
