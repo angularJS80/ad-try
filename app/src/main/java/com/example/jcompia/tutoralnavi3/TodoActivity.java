@@ -56,7 +56,8 @@ public class TodoActivity extends MainActivity{
             fireBaseModel = new FireBaseModel(TodoActivity.this);
             //fireBaseModel .firebaseAuthWithGoogle();
             fireBaseModel.firebaseNoneAuth();
-            arrayAdapter = new MyHashMapAdapter(this,arrayList);
+            arrayAdapter
+                    = new MyHashMapAdapter(this,arrayList);
             fireBaseModel.setListListener(arrayAdapter);
             myList.setAdapter(arrayAdapter);
         }

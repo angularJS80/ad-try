@@ -11,15 +11,21 @@ import android.widget.Toast;
 
 import com.example.jcompia.tutoralnavi3.facebook.PrefUtils;
 import com.example.jcompia.tutoralnavi3.facebook.User;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONObject;
+
+import java.util.Arrays;
 
 public class FaceBookLoginActivity extends Activity {
     private CallbackManager callbackManager;
@@ -41,13 +47,6 @@ public class FaceBookLoginActivity extends Activity {
 
             finish();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-
         callbackManager=CallbackManager.Factory.create();
 
         loginButton= (LoginButton)findViewById(R.id.login_button);
@@ -77,13 +76,50 @@ public class FaceBookLoginActivity extends Activity {
 
             }
         });
+
+        LoginManager.getInstance().logInWithReadPermissions(
+                this,
+                Arrays.asList("email"));
+
+        callbackManager = CallbackManager.Factory.create();
+
+        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(
+                    AccessToken oldAccessToken,
+                    AccessToken currentAccessToken) {
+                Log.d("test","test");
+                Profile profile = Profile.getCurrentProfile();
+                Log.d("test",profile.getName());
+
+                PrefUtils.setCurrentUser(user,FaceBookLoginActivity.this);
+
+
+                // Set the access token using
+                // currentAccessToken when it's loaded or set.
+            }
+        };
+
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // If the access token is available already assign it.
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+
 
 
     private FacebookCallback<LoginResult> mCallBack = new FacebookCallback<LoginResult>() {

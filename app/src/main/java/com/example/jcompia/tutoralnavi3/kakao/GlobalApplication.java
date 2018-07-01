@@ -85,7 +85,7 @@ public class GlobalApplication extends Application {
         FacebookSdk.sdkInitialize(getApplicationContext());
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
-                    "com.example.android.facebookloginsample",  // replace with your unique package name
+                    "com.example.jcompia.tutoralnavi3",  // replace with your unique package name
                     PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");

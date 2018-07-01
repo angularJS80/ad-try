@@ -128,9 +128,9 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), KakaoTalkMainActivity.class));
                         return true;
 
-                    /*case R.id.navi_sample_facelogin:
+                    case R.id.navi_sample_facelogin:
                         startActivity(new Intent(getApplicationContext(), FaceBookLoginActivity.class));
-                        return true;*/
+                        return true;
                     case R.id.navi_movilist:
                         startActivity(new Intent(getApplicationContext(), MoviActivity.class));
                         return true;

@@ -41,6 +41,7 @@ public class FaceBookLogoutActivity extends Activity {
                     imageURL = new URL("https://graph.facebook.com/" + "1435767690067161" + "/picture?type=large");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
+
                 }
                 try {
                     bitmap  = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());

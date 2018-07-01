@@ -54,8 +54,8 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.android.support:cardview-v7:21.0.+'
     compile group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
-    implementation 'com.facebook.android:facebook-login:[4,5)'
-
+    //implementation 'com.facebook.android:facebook-login:[4,5)'
+    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
     // ButterKnife
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
@@ -72,5 +72,6 @@ dependencies {
 
     compile 'com.facebook.stetho:stetho:1.4.2' // 네트워크 호출 인터셉트 후 디버깅 하고 싶다면 network helper 도 추가
     compile 'com.facebook.stetho:stetho-okhttp3:1.4.2'
+    compile 'com.google.firebase:firebase-messaging:11.6.0' // 푸시메시지
 }
 apply plugin: 'com.google.gms.google-services'
