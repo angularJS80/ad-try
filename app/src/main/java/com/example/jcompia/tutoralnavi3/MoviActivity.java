@@ -16,7 +16,10 @@ import com.example.jcompia.tutoralnavi3.data.AccountManagerHelper;
 import com.example.jcompia.tutoralnavi3.data.SharedPrefsHelper;
 import com.example.jcompia.tutoralnavi3.di.component.ActivityComponent;
 import com.example.jcompia.tutoralnavi3.di.component.DaggerActivityComponent;
+import com.example.jcompia.tutoralnavi3.di.component.DaggerPregentComponent;
+import com.example.jcompia.tutoralnavi3.di.component.PregentComponent;
 import com.example.jcompia.tutoralnavi3.di.module.ActivityModule;
+import com.example.jcompia.tutoralnavi3.di.module.PregentModule;
 import com.example.jcompia.tutoralnavi3.kakao.GlobalApplication;
 import com.example.jcompia.tutoralnavi3.mvp.movi.adapter.MoviAdapter;
 import com.example.jcompia.tutoralnavi3.mvp.movi.imp.IMoveTaskContractor;
@@ -60,6 +63,7 @@ public class MoviActivity extends MainActivity implements IMoveTaskContractor.Vi
     SharedPreferences sharedPref;
 
     ActivityComponent activityComponent;
+    PregentComponent pregentComponent;
 
 
     public ActivityComponent getActivityComponent() {
@@ -68,7 +72,15 @@ public class MoviActivity extends MainActivity implements IMoveTaskContractor.Vi
                     .activityModule(new ActivityModule(this))
                     //.modelModule(new ModelModule(new MoviModel()))
                     .applicationComponent(GlobalApplication.get(this).getComponent())
+
+
                     .build();
+            /*Pregent 스코프에서 관리되는 컴포넌트와 그하위 모듈 추가 S */
+            pregentComponent = DaggerPregentComponent.builder()
+                    .pregentModule(new PregentModule())
+                    .activityComponent(activityComponent)
+                    .build();
+            /*Pregent 스코프에서 관리되는 컴포넌트와 그하위 모듈 추가 E */
 
         }
         return activityComponent;

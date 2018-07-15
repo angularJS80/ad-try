@@ -16,6 +16,7 @@ import dagger.Component;
 @Component(dependencies = {ApplicationComponent.class}, modules = {ActivityModule.class})
 public interface ActivityComponent {
     void inject(MoviActivity moviActivity);
+
     //void inject(MovePregenter movePregenter);
     //void inject(MoviModel moviModel);
 
