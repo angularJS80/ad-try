@@ -51,6 +51,10 @@ public class MovePregenter implements IMoveTaskContractor.Pregenter {
     private SharedPreferences appData;
     Gson gson = new Gson();
 
+    public MovePregenter(MoviModel moviModel) {
+        this.moviModel = moviModel;
+    }
+
 
 /*
     public MovePregenter(MoviAdapter moviAdapter){

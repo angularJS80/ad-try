@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -83,6 +84,7 @@ public class MoviModel {
                 }
             })
             .addNetworkInterceptor(new StethoInterceptor())
+            .connectTimeout(1, TimeUnit.MINUTES)
             .build();
 
     final Retrofit retrofit = new Retrofit.Builder()
@@ -93,6 +95,9 @@ public class MoviModel {
             .build();
     final ApiRequest apiRequest = retrofit.create(ApiRequest.class);
 
+    public MoviModel(AccountManagerHelper accountManagerHelper) {
+        this.accountManagerHelper = accountManagerHelper;
+    }
 
 
     public Observable getMoviList(Map map){

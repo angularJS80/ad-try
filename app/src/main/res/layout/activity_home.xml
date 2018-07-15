@@ -28,6 +28,14 @@
             android:textColor="#1a1a1a"
             android:textSize="20sp" />
 
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="198dp"
+            android:layout_height="200dp"
+            android:text="Button" />
+
     </LinearLayout>
+
+
 </ScrollView>
 

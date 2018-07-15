@@ -64,7 +64,6 @@ public class MoviActivity extends MainActivity implements IMoveTaskContractor.Vi
 
     public ActivityComponent getActivityComponent() {
         if (activityComponent == null) {
-
             activityComponent = DaggerActivityComponent.builder()
                     .activityModule(new ActivityModule(this))
                     //.modelModule(new ModelModule(new MoviModel()))
