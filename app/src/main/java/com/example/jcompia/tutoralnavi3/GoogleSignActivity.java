@@ -127,6 +127,10 @@ public class GoogleSignActivity extends MainActivity {
             //디버그 키스토어의 sha1 결과를 firebase 콘솔에 접근하여 톱니바퀴를 루른다음 지문추가 해야 한다
             //keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
 
+            //
+            //C:\Program Files\Android\Android Studio\jre\bin>keytool -genkey -v -keystore C:\Users\사용자명\.android\debug.keystore -alias 별칭 -keyalg RSA -keysize 2048 -validity 18250
+            //C:\Program Files\Android\Android Studio\jre\bin>keytool -list -v -keystore C:\Users\사용자명\.android\debug.keystore -alias 별칭 -storepass 비밀번호 -keypass 비밀번호
+
            // mStatusTextView.setText(acct.getDisplayName());
             updateUI(true);
         } else {
